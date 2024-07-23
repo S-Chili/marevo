@@ -6,20 +6,34 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
+import logo from '../../logo192.png'
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Header(props) {
 
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <React.Fragment>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Button size="small">Subscribe</Button>
+      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
+        <Button size="small" >
+          <img src={logo} alt="Logo" style={{ width: 52, height: 62 }}/>
+        </Button>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
         <Typography
           component="h2"
           variant="h5"
           color="inherit"
           align="center"
           noWrap
-          sx={{ flex: 1 }}
+          sx={{ flex: 0.5 }}
         >
           Marevo
               </Typography>
@@ -29,7 +43,7 @@ function Header(props) {
           color="inherit"
           align="center"
           noWrap
-          sx={{ flex: 1 }}
+          sx={{ flex: 0.5 }}
         >
           About us
               </Typography>
@@ -39,7 +53,7 @@ function Header(props) {
           color="inherit"
           align="center"
           noWrap
-          sx={{ flex: 1 }}
+          sx={{ flex: 0.5 }}
         >
           Store
               </Typography>
@@ -59,13 +73,20 @@ function Header(props) {
           color="inherit"
           align="center"
           noWrap
-          sx={{ flex: 1 }}
+          sx={{ flex: 0.5 }}
         >
           Blog
-        </Typography>
-        <IconButton>
-          <HeadsetMicOutlinedIcon />
-        </IconButton>
+          </Typography>
+        </div>
+        <IconButton onClick={handleOpen}><HeadsetMicOutlinedIcon /></IconButton>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+          onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        
       </Toolbar>
       <Toolbar
         component="nav"
