@@ -99,7 +99,7 @@ function Header(props) {
             variant="body2"
             sx={{ p: 1, flexShrink: 0 }}
           >
-            title
+            Some content
           </Link>
       </Toolbar>
     </React.Fragment>
