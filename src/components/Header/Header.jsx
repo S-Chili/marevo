@@ -1,16 +1,14 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
 import logo from '../../logo192.png'
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-function Header(props) {
+function Header() {
 
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
@@ -88,32 +86,9 @@ function Header(props) {
         </Backdrop>
         
       </Toolbar>
-      <Toolbar
-        component="nav"
-        variant="dense"
-        sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
-      >
-          <Link
-            color="inherit"
-            noWrap
-            variant="body2"
-            sx={{ p: 1, flexShrink: 0 }}
-          >
-            Some content
-          </Link>
-      </Toolbar>
+      
     </React.Fragment>
   );
 }
-
-Header.propTypes = {
-  sections: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
-    }),
-  ).isRequired,
-  title: PropTypes.string.isRequired,
-};
 
 export default Header;
