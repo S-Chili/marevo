@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/marevo/static/css/main.f855e6bc.css",
+    "main.js": "/marevo/static/js/main.d028f3d2.js",
+    "static/js/453.a5fa3608.chunk.js": "/marevo/static/js/453.a5fa3608.chunk.js",
+    "static/media/logo192.png": "/marevo/static/media/logo192.f14e2c5de344e972b55e.png",
+    "index.html": "/marevo/index.html",
+    "main.f855e6bc.css.map": "/marevo/static/css/main.f855e6bc.css.map",
+    "main.d028f3d2.js.map": "/marevo/static/js/main.d028f3d2.js.map",
+    "453.a5fa3608.chunk.js.map": "/marevo/static/js/453.a5fa3608.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.d028f3d2.js"
+  ]
+}
