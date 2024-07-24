@@ -24,7 +24,6 @@ const useStyles = () => {
 
 export default function Hero() {
   const styles = useStyles();
-
     return (
      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div style={{ width: '1100px'}}>
