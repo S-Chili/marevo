@@ -48,7 +48,7 @@ const itemData = [
   
   {
     img: flower1,
-    title: 'Flower',
+    title: 'bloom',
   },
   {
     img: flower2,
