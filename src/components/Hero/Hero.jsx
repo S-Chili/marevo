@@ -5,8 +5,11 @@ import ImageListItem from '@mui/material/ImageListItem';
 import flower1 from './flowers2.jpg';
 import flower2 from './flowers1.jpg';
 import flower3 from './flowers3.jpg';
+import subs from './subscribe.jpg';
+import logoM from './marevo_logo.png';
+import modal from '../Header/pop up_desktop/Frame 48.jpg'
 import { useMemo } from 'react';
-import { Box } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography } from '@mui/material';
 
 const useStyles = () => {
   return useMemo(() => {
@@ -24,10 +27,40 @@ const useStyles = () => {
 
 export default function Hero() {
   const styles = useStyles();
+
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const [openNew, setOpenNew] = React.useState(false);
+  
+  const handleCloseNew = () => {
+    setOpenNew(false);
+      setOpen(false);
+  };
+  const handleOpenNew = () => {
+    setOpenNew(true);
+  };
+
+  const [email, setEmail] = React.useState('');
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
+
+   const isButtonDisabled = () => {
+    return email.trim() === '';
+   };
+       
     return (
-     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <div style={{ width: '1100px'}}>
-            <ImageList variant="woven" cols={3} gap={8} style={{ overflow: 'hidden', justifyItems: 'center' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '100px' }}>
+        <div style={{ width: '1100px', textAlign: 'center', position: 'relative' }}>
+            <img src={logoM} alt="marevo" style={{ position: 'relative', zIndex: '1' }}/>
+            <ImageList variant="woven" cols={3} gap={8} style={{ overflow: 'hidden', justifyItems: 'center', marginTop: '-60px' }}>
                 {itemData.map((item, index) => (
                     <ImageListItem key={item.img} style={styles[index]}>
                     <img
@@ -38,8 +71,98 @@ export default function Hero() {
                     />
                     </ImageListItem>
                 ))}
-            </ImageList>
+          </ImageList>
         </div>
+        <DialogActions style={{ alignSelf: 'center'}}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
+              <Typography
+                  component="h2"
+                  variant="h5"
+                  color="inherit"
+                  align="center"
+                  noWrap
+                  sx={{ flex: 0.5, margin: '16px 0' }}
+                >
+                  Follow to our newsletter
+              </Typography>
+              <Button
+                onClick={handleOpen}
+                variant="contained"
+                style={{ marginBottom: '32px', borderRadius: '20px', backgroundColor: 'orange', color: 'white', padding: '6px 24px' }}>
+                Subscribe
+              </Button>
+          </div>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <img src={subs} alt="greetengsflower"/>
+            <DialogTitle id="alert-dialog-title">
+             {"Follow to our newsletter"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Be the first  to get exclusive offers and the latest  news on our product directly in your box.
+              </DialogContentText>
+            </DialogContent>
+             <DialogActions style={{ alignSelf: 'center', width: '70%'}}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+                  <TextField
+                    id="standard-email"
+                    label="Your email"
+                    type="email"
+                    variant="standard"
+                    onChange={handleEmailChange}
+                  />
+                <Button
+                  onClick={handleOpenNew}
+                  disabled={isButtonDisabled()}
+                  variant="outlined"
+                  style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
+                >
+                  Send
+                </Button>
+                <Dialog
+                  open={openNew}
+                  onClose={handleCloseNew}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <img src={modal} alt="greetengsflower"/>
+                  <DialogTitle id="alert-dialog-title">
+                  {"Thank you!"}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Thanks for your subscribe ❤️
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions style={{ alignSelf: 'center', width: '70%'}}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+                        
+                      <Button
+                        onClick={handleCloseNew}
+                        disabled={isButtonDisabled()}
+                        variant="outlined"
+                        style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
+                      >
+                          Continue
+                      </Button>
+                    </div>
+                      
+                  </DialogActions>
+                
+                </Dialog>
+                </div>
+                
+              </DialogActions>
+          
+          </Dialog>
+            
+        </DialogActions>
+        
     </Box>
   );
 }
