@@ -1,24 +1,36 @@
 {
   "files": {
     "main.css": "/marevo/static/css/main.f855e6bc.css",
-    "main.js": "/marevo/static/js/main.785355b7.js",
+    "main.js": "/marevo/static/js/main.ed5e4d39.js",
     "static/js/453.a5fa3608.chunk.js": "/marevo/static/js/453.a5fa3608.chunk.js",
+    "static/media/bouquet7.png": "/marevo/static/media/bouquet7.0355172a5a80b659ad31.png",
+    "static/media/bouquet4.png": "/marevo/static/media/bouquet4.98a2dca987c42a6e5e9a.png",
+    "static/media/bouquet6.png": "/marevo/static/media/bouquet6.30c5107fcbd81fc6a683.png",
+    "static/media/bouquet5.png": "/marevo/static/media/bouquet5.12bf458d1aeebdf65739.png",
+    "static/media/bouquet8.png": "/marevo/static/media/bouquet8.89debb59689164028ac5.png",
+    "static/media/flowersImage3.jpg": "/marevo/static/media/flowersImage3.56326ae96330842c1223.jpg",
     "static/media/image_about.jpg": "/marevo/static/media/image_about.e5cf06f8446372eec080.jpg",
     "static/media/subscribe.jpg": "/marevo/static/media/subscribe.6c8e8429fe4994190820.jpg",
+    "static/media/bouquet12.avif": "/marevo/static/media/bouquet12.9e9e2e9c6dc2ffa414b6.avif",
+    "static/media/flowersImage2.jpg": "/marevo/static/media/flowersImage2.b5523616db1f71e536d2.jpg",
+    "static/media/bouquet10.avif": "/marevo/static/media/bouquet10.66a70362361240df88eb.avif",
+    "static/media/flowersImage1.jpg": "/marevo/static/media/flowersImage1.4f9367aea62db297dfbd.jpg",
     "static/media/flowers2.jpg": "/marevo/static/media/flowers2.213a93304c8597526e01.jpg",
     "static/media/flowers3.jpg": "/marevo/static/media/flowers3.3e28179a0379adf716a3.jpg",
+    "static/media/bouquet11.avif": "/marevo/static/media/bouquet11.37c3e350f9315a0d101b.avif",
     "static/media/contact.jpg": "/marevo/static/media/contact.6b78d1657084f708358a.jpg",
     "static/media/flowers1.jpg": "/marevo/static/media/flowers1.805f5f43d04f7eb855e1.jpg",
     "static/media/logo192.png": "/marevo/static/media/logo192.f14e2c5de344e972b55e.png",
     "static/media/Frame 48.jpg": "/marevo/static/media/Frame 48.b5fba0aa02a02f871637.jpg",
+    "static/media/bouquet9.avif": "/marevo/static/media/bouquet9.645fa60360ad7fedff11.avif",
     "static/media/marevo_logo.png": "/marevo/static/media/marevo_logo.1d439f7cbc7d57c1a0ec.png",
     "index.html": "/marevo/index.html",
     "main.f855e6bc.css.map": "/marevo/static/css/main.f855e6bc.css.map",
-    "main.785355b7.js.map": "/marevo/static/js/main.785355b7.js.map",
+    "main.ed5e4d39.js.map": "/marevo/static/js/main.ed5e4d39.js.map",
     "453.a5fa3608.chunk.js.map": "/marevo/static/js/453.a5fa3608.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.785355b7.js"
+    "static/js/main.ed5e4d39.js"
   ]
 }
