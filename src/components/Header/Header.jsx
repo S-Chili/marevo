@@ -20,6 +20,8 @@ function Header() {
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
+    setName(''); 
+    setEmail('');
   };
   const handleOpen = () => {
     setOpen(true);
@@ -32,6 +34,8 @@ function Header() {
   };
   const handleOpenNew = () => {
     setOpenNew(true);
+    setName(''); 
+    setEmail('');
   };
 
   const [name, setName] = React.useState('');
@@ -133,6 +137,7 @@ function Header() {
                 type="name"
                 variant="standard"
                 onChange={handleNameChange}
+                value={name}
               />
               <TextField
                 id="standard-email"
@@ -140,6 +145,7 @@ function Header() {
                 type="email"
                 variant="standard"
                 onChange={handleEmailChange}
+                 value={email}
               />
               <Button
                 variant="outlined"
@@ -169,7 +175,7 @@ function Header() {
                         
                       <Button
                         onClick={handleCloseNew}
-                        disabled={isButtonDisabled()}
+                        
                         variant="outlined"
                         style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
                       >
