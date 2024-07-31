@@ -3,11 +3,10 @@ import { Box, Grid, List, ListItem, ListItemIcon, ListItemText, Typography } fro
 import DoneTwoToneIcon from '@mui/icons-material/DoneTwoTone';
 import delivery from './delivery.png';
 
-export default function Delivery() {
-    const [dense, setDense] = React.useState(false);
+const Delivery = React.forwardRef(({ tabLabel }, ref) => {
     return (
       <>
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', paddingLeft: '24px', paddingRight: '24px' }}>
+    <Box ref={ref} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', paddingLeft: '24px', paddingRight: '24px' }}>
       <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
         <Typography
           component="h2"
@@ -25,12 +24,12 @@ export default function Delivery() {
             margin: '16px 0 16px 0', // Встановити верхній та нижній відступ
           }}
         >
-          Delivery
+          Delivery {tabLabel}
         </Typography>
         <hr style={{ flex: 1, border: 'none', borderBottom: '2px solid black', margin: '0', marginRight: '8px',}} />
       </div>
          <Grid item xs={12} md={6} style={{ placeSelf: 'start', marginLeft: '30px', marginBottom: '60px' }}>
-            <List dense={dense}>
+            <List >
                 <ListItem>
                   <ListItemIcon>
                     <DoneTwoToneIcon />
@@ -76,4 +75,6 @@ the order from the store "
               <img src={delivery} alt="greetengsflower" style={{ width: '100%' }} />  
           </>
   );
-}
+})
+
+export default Delivery;

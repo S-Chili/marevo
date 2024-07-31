@@ -19,7 +19,7 @@ import flower11 from './bouquet11.avif';
 import flower12 from './bouquet12.avif';
 
 
-export default function Store() {
+const Store = React.forwardRef(({ tabLabel }, ref) => {
 
     const [open, setOpen] = React.useState(false);
     const [selectedItem, setSelectedItem] = React.useState(null);
@@ -27,146 +27,146 @@ export default function Store() {
     const [name, setName] = React.useState('');
     const [phone, setPhone] = React.useState('');
     
-  const handleClose = () => {
-      setOpen(false);
-      setSelectedItem(null); 
-  };
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedItem(null);
+    };
     
-  const handleOpen = (item) => {
-      setOpen(true);
-      setSelectedItem(item);
-  };
+    const handleOpen = (item) => {
+        setOpen(true);
+        setSelectedItem(item);
+    };
 
-  const handleCloseNew = () => {
-    setOpenNew(false);
-    setOpen(false);
-  };
-  const handleOpenNew = () => {
-    setOpenNew(true);
-  };
+    const handleCloseNew = () => {
+        setOpenNew(false);
+        setOpen(false);
+    };
+    const handleOpenNew = () => {
+        setOpenNew(true);
+    };
 
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    };
 
-  const handlePhoneChange = (event) => {
-    setPhone(event.target.value);
-  };
+    const handlePhoneChange = (event) => {
+        setPhone(event.target.value);
+    };
 
-  const isButtonDisabled = () => {
-    return name.trim() === '' || phone.trim() === '';
-  };
+    const isButtonDisabled = () => {
+        return name.trim() === '' || phone.trim() === '';
+    };
 
     return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', paddingLeft: '24px', paddingRight: '24px' }}>
-      <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ 
-            flexShrink: 0, 
-            fontSize: '2.5rem',
-            whiteSpace: 'nowrap',
-            textAlign: 'start',
-            paddingLeft: '8px',
-            paddingRight: '24px',
-            margin: '16px 0 16px 0', // Встановити верхній та нижній відступ
-          }}
-        >
-          Store
-        </Typography>
-        <hr style={{ flex: 1, border: 'none', borderBottom: '2px solid black', margin: '0', marginRight: '8px',}} />
-      </div>
-      <ImageList sx={{ width: '50%', height: 'auto' }} cols={2} gap={20}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img}>
-            <img
-              srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              src={`${item.img}?w=248&fit=crop&auto=format`}
-              alt={item.title}
-              loading="lazy"
-            />
-            <ImageListItemBar
-              title={item.title}
-              subtitle={item.price}
-              actionIcon={
-                <IconButton
-                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  aria-label={`info about ${item.title}`}
-                  onClick={() => handleOpen(item)}
+        <Box ref={ref} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', paddingLeft: '24px', paddingRight: '24px' }}>
+            <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+                <Typography
+                    component="h2"
+                    variant="h5"
+                    color="inherit"
+                    align="center"
+                    noWrap
+                    sx={{
+                        flexShrink: 0,
+                        fontSize: '2.5rem',
+                        whiteSpace: 'nowrap',
+                        textAlign: 'start',
+                        paddingLeft: '8px',
+                        paddingRight: '24px',
+                        margin: '16px 0 16px 0', // Встановити верхній та нижній відступ
+                    }}
                 >
-                  <ShoppingCartOutlinedIcon />
-                </IconButton>
-              }
-            />
-          </ImageListItem>
-        ))}
-      </ImageList>
+                    Store { tabLabel }
+                </Typography>
+                <hr style={{ flex: 1, border: 'none', borderBottom: '2px solid black', margin: '0', marginRight: '8px', }} />
+            </div>
+            <ImageList sx={{ width: '50%', height: 'auto' }} cols={2} gap={20}>
+                {itemData.map((item) => (
+                    <ImageListItem key={item.img}>
+                        <img
+                            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                            src={`${item.img}?w=248&fit=crop&auto=format`}
+                            alt={item.title}
+                            loading="lazy"
+                        />
+                        <ImageListItemBar
+                            title={item.title}
+                            subtitle={item.price}
+                            actionIcon={
+                                <IconButton
+                                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                    aria-label={`info about ${item.title}`}
+                                    onClick={() => handleOpen(item)}
+                                >
+                                    <ShoppingCartOutlinedIcon />
+                                </IconButton>
+                            }
+                        />
+                    </ImageListItem>
+                ))}
+            </ImageList>
 
-      <Dialog
-  open={open}
-  onClose={handleClose}
-  aria-labelledby="alert-dialog-title"
-  aria-describedby="alert-dialog-description"
->
-  {selectedItem && (
-    <>
-      <div style={{ display: 'grid', gridTemplateRows: '1fr auto auto', maxHeight: '700px' }}>
-        <div style={{ height: '90%', overflow: 'hidden' }}>
-          <img 
-            src={selectedItem.img} 
-            alt="greetengsflower" 
-            style={{ width: '100%', objectFit: 'cover', height: '100%' }} 
-          />
-        </div>
-        <DialogTitle id="alert-dialog-title">
-          {"Your order:"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Bouquet "{selectedItem.title}", it costs {selectedItem.price}. 
-            Please enter your contact details, our manager will contact you within 30 minutes to clarify the delivery address and pay for the order!
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions style={{ alignSelf: 'center', width: '70%', justifySelf: 'center' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-            <TextField
-              id="standard-name"
-              label="Your name"
-              type="name"
-              variant="standard"
-              onChange={handleNameChange}
-            />
-            <TextField
-              id="standard-phone"
-              label="Your phone"
-              type="phone"
-              variant="standard"
-              onChange={handlePhoneChange}
-            />
-            <Button
-              variant="outlined"
-              onClick={handleOpenNew}
-              disabled={isButtonDisabled()}
-              style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
             >
-              Send
-            </Button>
-          </div>
-        </DialogActions>
-      </div>
-    </>
-  )}
-</Dialog>
+                {selectedItem && (
+                    <>
+                        <div style={{ display: 'grid', gridTemplateRows: '1fr auto auto', maxHeight: '700px' }}>
+                            <div style={{ height: '90%', overflow: 'hidden' }}>
+                                <img
+                                    src={selectedItem.img}
+                                    alt="greetengsflower"
+                                    style={{ width: '100%', objectFit: 'cover', height: '100%' }}
+                                />
+                            </div>
+                            <DialogTitle id="alert-dialog-title">
+                                {"Your order:"}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText id="alert-dialog-description">
+                                    Bouquet "{selectedItem.title}", it costs {selectedItem.price}.
+                                    Please enter your contact details, our manager will contact you within 30 minutes to clarify the delivery address and pay for the order!
+                                </DialogContentText>
+                            </DialogContent>
+                            <DialogActions style={{ alignSelf: 'center', width: '70%', justifySelf: 'center' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
+                                    <TextField
+                                        id="standard-name"
+                                        label="Your name"
+                                        type="name"
+                                        variant="standard"
+                                        onChange={handleNameChange}
+                                    />
+                                    <TextField
+                                        id="standard-phone"
+                                        label="Your phone"
+                                        type="phone"
+                                        variant="standard"
+                                        onChange={handlePhoneChange}
+                                    />
+                                    <Button
+                                        variant="outlined"
+                                        onClick={handleOpenNew}
+                                        disabled={isButtonDisabled()}
+                                        style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
+                                    >
+                                        Send
+                                    </Button>
+                                </div>
+                            </DialogActions>
+                        </div>
+                    </>
+                )}
+            </Dialog>
 
-      <Dialog
-        open={openNew}
-        onClose={handleCloseNew}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+            <Dialog
+                open={openNew}
+                onClose={handleCloseNew}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
             >
                 {selectedItem && (
                     <>
@@ -193,10 +193,10 @@ export default function Store() {
                         </DialogActions>
                     </>
                 )}
-      </Dialog>
-    </Box>
-  );
-}
+            </Dialog>
+        </Box>
+    );
+});
 
 const itemData = [
   {
@@ -271,3 +271,5 @@ const itemData = [
     cols: 2,
   },
 ];
+
+export default Store;

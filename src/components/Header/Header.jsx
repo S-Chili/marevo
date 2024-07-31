@@ -2,7 +2,6 @@ import * as React from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
 import logo from '../../logo192.png'
 import modal from './pop up_desktop/Frame 48.jpg'
@@ -12,10 +11,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { TextField } from '@mui/material';
+import { Box, Tab, Tabs, TextField } from '@mui/material';
 
 
-function Header() {
+function Header({ value, handleChange }) {
 
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
@@ -59,58 +58,15 @@ function Header() {
         <Button size="small" >
           <img src={logo} alt="Logo" style={{ width: 52, height: 62 }}/>
         </Button>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px' }}>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 0.5 }}
-        >
-          Marevo
-              </Typography>
-              <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 0.5 }}
-        >
-          About us
-              </Typography>
-              <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 0.5 }}
-        >
-          Store
-              </Typography>
-              <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 1 }}
-        >
-          Delivery
-              </Typography>
-              <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          align="center"
-          noWrap
-          sx={{ flex: 0.5 }}
-        >
-          Blog
-          </Typography>
-        </div>
+        <Box sx={{ display: 'flex', height: '100%' }}>
+                    <Tabs
+                        value={value === null ? false : value} onChange={handleChange} aria-label="Tabs"
+                    >
+                        <Tab label="About" value={0}/>
+                        <Tab label="Store" value={1}/>
+                        <Tab label="Delivery" value={2}/>
+                    </Tabs>
+                  </Box>
         <IconButton onClick={handleOpen}><HeadsetMicOutlinedIcon /></IconButton>
         
         <Dialog

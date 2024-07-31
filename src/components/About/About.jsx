@@ -2,9 +2,9 @@ import * as React from 'react';
 import about from './image_about.jpg';
 import { Box, Typography } from '@mui/material';
 
-export default function About() {
+const About = React.forwardRef(({ tabLabel }, ref) => {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', paddingLeft: '24px', paddingRight: '24px' }}>
+    <Box ref={ref} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', paddingLeft: '24px', paddingRight: '24px' }}>
       <div style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
         <Typography
           component="h2"
@@ -22,7 +22,7 @@ export default function About() {
             margin: '16px 0 16px 0', // Встановити верхній та нижній відступ
           }}
         >
-          About
+          About {tabLabel}
         </Typography>
         <hr style={{ flex: 1, border: 'none', borderBottom: '2px solid black', margin: '0', marginRight: '8px',}} />
       </div>
@@ -42,4 +42,6 @@ export default function About() {
       </div>        
     </Box>
   );
-}
+});
+
+export default About;
