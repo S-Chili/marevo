@@ -4,12 +4,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
-import footLogo from '../../logo512.png'
+import footLogo from '../../logo512.png';
 import { Button, Tab, Tabs } from '@mui/material';
+import FaceLogo from './facebook.png';
+import InstaLogo from './instagram.png';
 
 function Copyright() {
   return (
-    <Typography variant="body2" color='lightgray'>
+    <Typography variant="body2" color='lightgray' sx={{textAlign: 'center'}}>
       {'Copyright © '}
       <Link color="inherit" href="https://github.com/S-Chili">
         Check developer
@@ -36,7 +38,7 @@ export default function Footer({ value, handleChange }) {
             textAlign: 'center'
           }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexDirection: 'row', alignItems: 'flex-start' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'self-start' }}>
                   <Box sx={{ alignSelf: 'center' }}>
                     <Button size="small" >
                         <img src={footLogo} alt="Logo" style={{ width: 52, height: 62 }}/>
@@ -53,18 +55,45 @@ export default function Footer({ value, handleChange }) {
                         <Tab label="Delivery" value={2} sx={{ color: 'lightgray'}}/>
                     </Tabs>
                   </Box>
-                  <Box>
-                      
+                  <Box sx={{ textAlign: 'start', marginLeft: 2, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <Typography variant="h6" color="lightgray" sx={{fontSize: '1.15rem'}}>
+                      Opening times
+                    </Typography>
+                    <Typography variant="body2" color="lightgray">
+                      Every day
+                    </Typography>
+                    <Typography variant="body2" color="lightgray">
+                      9:00 - 22:00
+                    </Typography>
                   </Box>
-                  <Box>
-                      
+                  <Box sx={{ textAlign: 'start', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <Typography variant="h6" color="lightgray" sx={{fontSize: '1.15rem'}}>
+                        Contacts
+                      </Typography>
+                       <Typography variant="body2" color="lightgray">
+                        +38 063 123 45 67
+                      </Typography>
+                       <Typography variant="body2" color="lightgray">
+                        marevostudio@example.com
+                      </Typography>
+                       <Typography variant="body2" color="lightgray">
+                        Reitarska Street, 11
+                      </Typography>
+                       <Typography variant="body2" color="lightgray">
+                        Kyiv, Ukraine
+                      </Typography>
                   </Box>
-                  <Box>
-                      
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignSelf: 'center' }}>
+                      <Button size="small">
+                        <img src={FaceLogo} alt="Facebook" />
+                      </Button>
+                      <Button size="small">
+                        <img src={InstaLogo} alt="Instagram"/>
+                    </Button>
                   </Box>
             </Box>
           <Container maxWidth="sm">
-            <Copyright />
+          <Copyright/>
           </Container>
         </Box>
     </ThemeProvider>
