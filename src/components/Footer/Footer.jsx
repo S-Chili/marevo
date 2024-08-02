@@ -49,14 +49,15 @@ export default function Footer({ value, handleChange }) {
                         orientation="vertical"
                         value={value === null ? false : value} onChange={handleChange} aria-label="Tabs"
                         sx={{ borderRight: 1, borderColor: 'divider' }}
+                        TabIndicatorProps={{ style: { display: 'none' } }}
                     >
                         <Tab label="About" value={0} sx={{ color: 'lightgray'}}/>
                         <Tab label="Store" value={1} sx={{ color: 'lightgray'}}/>
                         <Tab label="Delivery" value={2} sx={{ color: 'lightgray'}}/>
                     </Tabs>
                   </Box>
-                  <Box sx={{ textAlign: 'start', marginLeft: 2, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <Typography variant="h6" color="lightgray" sx={{fontSize: '1.15rem'}}>
+                  <Box sx={{ textAlign: 'start', marginLeft: 2, display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant="h6" color="lightgray" sx={{fontSize: '1.15rem', marginBottom: '10px'}}>
                       Opening times
                     </Typography>
                     <Typography variant="body2" color="lightgray">
@@ -77,10 +78,8 @@ export default function Footer({ value, handleChange }) {
                         marevostudio@example.com
                       </Typography>
                        <Typography variant="body2" color="lightgray">
-                        Reitarska Street, 11
-                      </Typography>
-                       <Typography variant="body2" color="lightgray">
-                        Kyiv, Ukraine
+                          Reitarska Street, 11<br/>
+                          Kyiv, Ukraine
                       </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, alignSelf: 'center' }}>
