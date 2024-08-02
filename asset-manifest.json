@@ -1,8 +1,9 @@
 {
   "files": {
     "main.css": "/marevo/static/css/main.f855e6bc.css",
-    "main.js": "/marevo/static/js/main.ed5e4d39.js",
+    "main.js": "/marevo/static/js/main.35c69069.js",
     "static/js/453.a5fa3608.chunk.js": "/marevo/static/js/453.a5fa3608.chunk.js",
+    "static/media/delivery.png": "/marevo/static/media/delivery.7b40373b01e6018eb338.png",
     "static/media/bouquet7.png": "/marevo/static/media/bouquet7.0355172a5a80b659ad31.png",
     "static/media/bouquet4.png": "/marevo/static/media/bouquet4.98a2dca987c42a6e5e9a.png",
     "static/media/bouquet6.png": "/marevo/static/media/bouquet6.30c5107fcbd81fc6a683.png",
@@ -23,14 +24,15 @@
     "static/media/logo192.png": "/marevo/static/media/logo192.f14e2c5de344e972b55e.png",
     "static/media/Frame 48.jpg": "/marevo/static/media/Frame 48.b5fba0aa02a02f871637.jpg",
     "static/media/bouquet9.avif": "/marevo/static/media/bouquet9.645fa60360ad7fedff11.avif",
+    "static/media/logo512.png": "/marevo/static/media/logo512.c7f5ffec63a1207a9624.png",
     "static/media/marevo_logo.png": "/marevo/static/media/marevo_logo.1d439f7cbc7d57c1a0ec.png",
     "index.html": "/marevo/index.html",
     "main.f855e6bc.css.map": "/marevo/static/css/main.f855e6bc.css.map",
-    "main.ed5e4d39.js.map": "/marevo/static/js/main.ed5e4d39.js.map",
+    "main.35c69069.js.map": "/marevo/static/js/main.35c69069.js.map",
     "453.a5fa3608.chunk.js.map": "/marevo/static/js/453.a5fa3608.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.ed5e4d39.js"
+    "static/js/main.35c69069.js"
   ]
 }
