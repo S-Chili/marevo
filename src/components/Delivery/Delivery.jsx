@@ -72,7 +72,7 @@ the order from the store "
             </List>
         </Grid>   
       </Box>
-              <img src={delivery} alt="greetengsflower" style={{ width: '100%' }} />  
+              <img src={delivery} alt="greetengsflower" style={{ width: '100%', marginBottom: '-10px' }} />  
           </>
   );
 })

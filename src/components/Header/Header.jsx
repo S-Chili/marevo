@@ -55,7 +55,7 @@ function Header({ value, handleChange }) {
   return (
     <React.Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
-        <Button size="small" >
+        <Button size="small" onClick={() => window.location.reload()}>
           <img src={logo} alt="Logo" style={{ width: 52, height: 62 }}/>
         </Button>
         <Box sx={{ display: 'flex', height: '100%' }}>

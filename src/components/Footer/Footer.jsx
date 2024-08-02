@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -8,6 +8,7 @@ import footLogo from '../../logo512.png';
 import { Button, Tab, Tabs } from '@mui/material';
 import FaceLogo from './facebook.png';
 import InstaLogo from './instagram.png';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 function Copyright() {
   return (
@@ -25,7 +26,59 @@ function Copyright() {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
+const ScrollToTopButton = () => {
+  const [showButton, setShowButton] = useState(false);
+
+  const handleScroll = () => {
+    if (window.pageYOffset > 300) {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
+  };
+
+  const handleClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+   return (
+    <Button
+      onClick={handleClick}
+      sx={{
+        display: showButton ? 'flex' : 'none',
+        position: 'fixed',
+        bottom: 16,
+        right: 16,
+        zIndex: 1000,
+        backgroundColor: 'orange',
+        color: 'white',
+        '&:hover': {
+          backgroundColor: '#ff7900',
+        }
+      }}
+    >
+      <KeyboardArrowUpIcon />
+    </Button>
+  );
+};
+
 export default function Footer({ value, handleChange }) {
+
+  const handleLogoClick = () => {
+    window.scrollTo(0, 0);
+    window.location.reload();
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
         <Box
@@ -40,7 +93,7 @@ export default function Footer({ value, handleChange }) {
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', alignItems: 'self-start' }}>
                   <Box sx={{ alignSelf: 'center' }}>
-                    <Button size="small" >
+                    <Button size="small" onClick={handleLogoClick}>
                         <img src={footLogo} alt="Logo" style={{ width: 52, height: 62 }}/>
                     </Button>
                   </Box> 
@@ -72,10 +125,14 @@ export default function Footer({ value, handleChange }) {
                         Contacts
                       </Typography>
                        <Typography variant="body2" color="lightgray">
-                        +38 063 123 45 67
+                        <Link href="tel:+380631234567" color="inherit" underline="none">
+                           +38 063 123 45 67
+                         </Link>
                       </Typography>
                        <Typography variant="body2" color="lightgray">
-                        marevostudio@example.com
+                        <Link href="mailto:marevostudio@example.com" color="inherit" underline="none">
+                           marevostudio@example.com
+                         </Link>
                       </Typography>
                        <Typography variant="body2" color="lightgray">
                           Reitarska Street, 11<br/>
@@ -93,7 +150,8 @@ export default function Footer({ value, handleChange }) {
             </Box>
           <Container maxWidth="sm">
           <Copyright/>
-          </Container>
+        </Container>
+        <ScrollToTopButton />
         </Box>
     </ThemeProvider>
   );
