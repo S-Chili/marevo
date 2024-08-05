@@ -31,12 +31,12 @@ function App() {
   }, [value]);
 
   return (
-    <Router>
+    <Router basename="/marevo">
       <div>
         <Header value={value} handleChange={handleChange} />
         <Routes>
           <Route
-            path="/marevo"
+            path="/"
             element={
               <>
                 <Hero />

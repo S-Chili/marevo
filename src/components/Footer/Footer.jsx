@@ -77,7 +77,7 @@ export default function Footer({ value, handleChange }) {
   const navigate = useNavigate();
 
   const handleLogoClick = () => {
-    navigate('/marevo');
+    navigate('/');
   };
 
   return (
