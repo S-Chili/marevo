@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/marevo/static/css/main.f855e6bc.css",
-    "main.js": "/marevo/static/js/main.35c69069.js",
+    "main.js": "/marevo/static/js/main.06cb8b57.js",
     "static/js/453.a5fa3608.chunk.js": "/marevo/static/js/453.a5fa3608.chunk.js",
     "static/media/delivery.png": "/marevo/static/media/delivery.7b40373b01e6018eb338.png",
     "static/media/bouquet7.png": "/marevo/static/media/bouquet7.0355172a5a80b659ad31.png",
@@ -28,11 +28,11 @@
     "static/media/marevo_logo.png": "/marevo/static/media/marevo_logo.1d439f7cbc7d57c1a0ec.png",
     "index.html": "/marevo/index.html",
     "main.f855e6bc.css.map": "/marevo/static/css/main.f855e6bc.css.map",
-    "main.35c69069.js.map": "/marevo/static/js/main.35c69069.js.map",
+    "main.06cb8b57.js.map": "/marevo/static/js/main.06cb8b57.js.map",
     "453.a5fa3608.chunk.js.map": "/marevo/static/js/453.a5fa3608.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.35c69069.js"
+    "static/js/main.06cb8b57.js"
   ]
 }
