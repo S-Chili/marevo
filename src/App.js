@@ -36,7 +36,7 @@ function App() {
         <Header value={value} handleChange={handleChange} />
         <Routes>
           <Route
-            path="/"
+            path="/marevo"
             element={
               <>
                 <Hero />

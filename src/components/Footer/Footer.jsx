@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -73,10 +74,10 @@ const ScrollToTopButton = () => {
 };
 
 export default function Footer({ value, handleChange }) {
+  const navigate = useNavigate();
 
   const handleLogoClick = () => {
-    window.scrollTo(0, 0);
-    window.location.reload();
+    navigate('/marevo');
   };
 
   return (

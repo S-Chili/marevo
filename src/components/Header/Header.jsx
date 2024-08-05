@@ -71,7 +71,7 @@ function Header({ value, handleChange }) {
    };
   
   const handleHome = () => {
-    navigate('/');
+    navigate('/marevo');
   }
 
   const handleSignIn = () => {
