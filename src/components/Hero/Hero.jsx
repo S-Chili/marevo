@@ -173,6 +173,7 @@ export default function Hero() {
                         
                       <Button
                         onClick={handleCloseNew}
+
                         variant="outlined"
                         style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
                       >

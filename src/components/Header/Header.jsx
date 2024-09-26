@@ -34,7 +34,7 @@ function Header({ value, handleChange }) {
     setOpenNew(false);
     setOpen(false);
   };
- 
+  
   const handleOpenNew = async () => {
   // Створюємо об'єкт з ім'ям і email
   const contactData = {
@@ -74,7 +74,6 @@ function Header({ value, handleChange }) {
 
   const handleNameChange = (event) => {
     setName(event.target.value);
-
   };
 
   const handleEmailChange = (event) => {
@@ -180,8 +179,10 @@ function Header({ value, handleChange }) {
                 />
                 <TextField
                   id="standard-email"
+
                   label="Your phone"
                   type="number"
+
                   variant="standard"
                   onChange={handleEmailChange}
                   value={email}
