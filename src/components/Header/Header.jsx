@@ -34,11 +34,40 @@ function Header({ value, handleChange }) {
     setOpenNew(false);
     setOpen(false);
   };
-  const handleOpenNew = () => {
-    setOpenNew(true);
-    setName(''); 
-    setEmail('');
+  
+  const handleOpenNew = async () => {
+  // Створюємо об'єкт з ім'ям і email
+  const contactData = {
+    name: name.trim(),
+    phone: email.trim(),
   };
+
+  try {
+    // Відправляємо дані на сервер
+    const response = await fetch("http://localhost:3000/api/contacts/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(contactData),
+    });
+
+    // Перевіряємо, чи все пройшло успішно
+    if (!response.ok) {
+      throw new Error("Error submitting the form");
+    }
+
+    const data = await response.json();
+    console.log("Response from server:", data);
+
+    // Відкриваємо діалог після успішної відправки
+    setOpenNew(true);
+    setName('');
+    setEmail('');
+  } catch (error) {
+    console.error("Failed to submit the form:", error.message);
+  }
+};
 
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -150,8 +179,10 @@ function Header({ value, handleChange }) {
                 />
                 <TextField
                   id="standard-email"
-                  label="Your email"
-                  type="email"
+
+                  label="Your phone"
+                  type="number"
+
                   variant="standard"
                   onChange={handleEmailChange}
                   value={email}

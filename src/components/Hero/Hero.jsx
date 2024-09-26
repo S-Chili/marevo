@@ -37,13 +37,42 @@ export default function Hero() {
   };
 
   const [openNew, setOpenNew] = React.useState(false);
-  
-  const handleCloseNew = () => {
-    setOpenNew(false);
-      setOpen(false);
+
+   const handleOpenNew = async () => {
+  // Створюємо об'єкт з ім'ям і email
+  const contactData = {
+    email: email.trim(),
   };
-  const handleOpenNew = () => {
+
+  try {
+    // Відправляємо дані на сервер
+    const response = await fetch("http://localhost:3000/api/subscribes/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(contactData),
+    });
+
+    // Перевіряємо, чи все пройшло успішно
+    if (!response.ok) {
+      throw new Error("Error submitting the form");
+    }
+
+    const data = await response.json();
+    console.log("Response from server:", data);
+
+    // Відкриваємо діалог після успішної відправки
     setOpenNew(true);
+    setEmail('');
+  } catch (error) {
+    console.error("Failed to submit the form:", error.message);
+  }
+   };
+  
+   const handleCloseNew = () => {
+     setOpen(false);
+     setOpenNew(false);
   };
 
   const [email, setEmail] = React.useState('');
@@ -144,7 +173,7 @@ export default function Hero() {
                         
                       <Button
                         onClick={handleCloseNew}
-                        disabled={isButtonDisabled()}
+
                         variant="outlined"
                         style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
                       >
