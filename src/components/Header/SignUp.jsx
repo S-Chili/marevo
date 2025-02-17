@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,13 +13,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
-
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -26,6 +29,86 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     });
+  };
+
+  const [firstName, setfirstName] = React.useState('');
+  const [lastName, setlastName] = React.useState('');
+  const [email, setemail] = React.useState('');
+  const [password, setpassword] = React.useState('');
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [userName, setUserName] = React.useState('');
+  
+
+  const handleSignUp = async () => {
+    const userData = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim(),
+      password: password.trim(),
+    };
+    
+    try {
+      // Відправляємо дані на сервер для реєстрації
+      const response = await fetch("http://localhost:3000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      // Перевірка успіху реєстрації
+      if (!response.ok) {
+        throw new Error("Error during registration");
+      }
+
+      const data = await response.json();
+      console.log("Response from server:", data);
+
+      // Після реєстрації автоматично виконуємо логін
+      const loginResponse = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+        }),
+        credentials: "include", // Додаємо кукі
+      });
+
+      if (!loginResponse.ok) {
+        throw new Error("Error during login");
+      }
+
+      const loginData = await loginResponse.json();
+         setUserName(data.firstName);
+   localStorage.setItem('showAlert', 'true');
+    setShowAlert(true);
+
+    // Встановлюємо таймер, щоб автоматично закрити алерт через 30 секунд
+        setTimeout(() => {
+          setShowAlert(false);
+          localStorage.removeItem('showAlert');
+          navigate('/'); // Перенаправлення після того, як алерт закриється
+          window.location.reload();
+        }, 2000); // 2 секунд
+
+      console.log("Login success:", loginData);
+
+      // Після успішного логіну, очистити поля форми
+      setfirstName('');
+      setlastName('');
+      setemail('');
+      setpassword('');
+    } catch (error) {
+      console.error("Failed:", error.message);
+    }
+
+    const cookies = document.cookie;
+    console.log(cookies); // Виведе всі куки
+    
   };
 
   return (
@@ -48,6 +131,15 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+           <Box sx={{ position: 'fixed', top: 20, right: 20, width: 'auto', zIndex: 999 }}>
+            {showAlert && (
+              <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert severity="success">
+                  {`Welcome, ${userName}! You have successfully logged in.`}
+                </Alert>
+              </Stack>
+            )}
+          </Box>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -57,7 +149,9 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="firstName"
+                  value={firstName}
                   label="First Name"
+                  onChange={(e) => setfirstName(e.target.value)}
                   autoFocus
                 />
               </Grid>
@@ -66,6 +160,8 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="lastName"
+                  value={lastName}
+                  onChange={(e) => setlastName(e.target.value)}
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
@@ -76,6 +172,8 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
+                  value={email}
+                  onChange={(e) => setemail(e.target.value)}
                   label="Email Address"
                   name="email"
                   autoComplete="email"
@@ -86,6 +184,8 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
+                  value={password}
+                  onChange={(e) => setpassword(e.target.value)}
                   label="Password"
                   type="password"
                   id="password"
@@ -101,6 +201,7 @@ export default function SignUp() {
             </Grid>
             <Button
               type="submit"
+              onClick={handleSignUp}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}

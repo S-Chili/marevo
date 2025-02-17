@@ -1,92 +1,97 @@
-import * as React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
-import logo from '../../logo192.png'
-import modal from './pop up_desktop/Frame 48.jpg'
-import contact from './contact.jpg'
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Avatar from '@mui/material/Avatar';
 import { Box, Menu, MenuItem, Tab, Tabs, TextField } from '@mui/material';
-
+import logo from '../../logo192.png'
+import modal from './pop up_desktop/Frame 48.jpg'
+import contact from './contact.jpg'
+import useAuth from '../Header/useAuth';
 
 function Header({ value, handleChange }) {
   const navigate = useNavigate();
+  const isAuthenticated = useAuth();
 
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
     setName(''); 
-    setEmail('');
+    setPhone('');
   };
   const handleOpen = () => {
     setOpen(true);
   };
 
-   const [openNew, setOpenNew] = React.useState(false);
+  const [openNew, setOpenNew] = React.useState(false);
   const handleCloseNew = () => {
-    setOpenNew(false);
-    setOpen(false);
+      setOpenNew(false);
+      setOpen(false);
   };
+
+  const avatarUrl = localStorage.getItem("avatarUrl");
  
   const handleOpenNew = async () => {
-  // Створюємо об'єкт з ім'ям і email
-  const contactData = {
-    name: name.trim(),
-    phone: email.trim(),
-  };
+      // Створюємо об'єкт з ім'ям і email
+    const contactData = {
+      name: name.trim(),
+      phone: phone.trim(),
+    };
 
-  try {
-    // Відправляємо дані на сервер
-    const response = await fetch("http://localhost:3000/api/contacts/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(contactData),
-    });
+      try {
+        // Відправляємо дані на сервер
+        const response = await fetch("http://localhost:3000/api/contacts/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Важливо для відправки cookies
+          body: JSON.stringify(contactData),
+        });
 
-    // Перевіряємо, чи все пройшло успішно
-    if (!response.ok) {
-      throw new Error("Error submitting the form");
-    }
+        // Перевіряємо, чи все пройшло успішно
+        if (!response.ok) {
+          const errorData = await response.text();  // Якщо сервер повертає текстову помилку
+          throw new Error(errorData || 'Error submitting the form');
+        }
 
-    const data = await response.json();
-    console.log("Response from server:", data);
+        const data = await response.json();
+        console.log("Response from server:", data);
 
-    // Відкриваємо діалог після успішної відправки
-    setOpenNew(true);
-    setName('');
-    setEmail('');
-  } catch (error) {
-    console.error("Failed to submit the form:", error.message);
-  }
-};
+        // Відкриваємо діалог після успішної відправки
+        setOpenNew(true);
+        setName('');
+        setPhone('');
+      } catch (error) {
+        console.error("Failed to submit the form:", error.message);
+      }
+   };
 
   const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
+  const [phone, setPhone] = React.useState('');
 
   const handleNameChange = (event) => {
     setName(event.target.value);
-
   };
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+    setPhone(event.target.value);
   };
 
   const isButtonDisabled = () => {
-    return name.trim() === '' || email.trim() === '';
+    return name.trim() === '' || phone.trim() === '';
   };
 
-   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -95,19 +100,30 @@ function Header({ value, handleChange }) {
     setAnchorEl(null);
   };
 
-   const handleSignUp = () => {
-    handleCloseMenu();
-    navigate('/signup');
+  const userPage = () => {
+    navigate("/mypage");
    };
-  
+
+  const logout = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/logout", {
+        method: "GET",
+        credentials: "include", // Додає cookies у запит
+      });
+      if (response.ok) {
+        navigate("/signIn");
+         window.location.reload();// Перенаправлення на сторінку входу
+      } else {
+        console.error("Помилка логауту");
+      }
+    } catch (error) {
+      console.error("Помилка логауту:", error);
+    }
+  };
+ 
   const handleHome = () => {
     navigate('/');
   }
-
-  const handleSignIn = () => {
-    handleCloseMenu();
-    navigate('/signIn');
-   };
 
   return (
     <React.Fragment>
@@ -116,21 +132,36 @@ function Header({ value, handleChange }) {
           <img src={logo} alt="Logo" style={{ width: 52, height: 62 }}/>
         </Button>
         <Box sx={{ display: 'flex', height: '100%' }}>
-                    <Tabs
-                        value={value === null ? false : value} onChange={handleChange} aria-label="Tabs"
-                    >
-                        <Tab label="About" value={0}/>
-                        <Tab label="Store" value={1}/>
-                        <Tab label="Delivery" value={2}/>
-                    </Tabs>
+          <Tabs
+              value={value === null ? false : value} onChange={handleChange} aria-label="Tabs"
+          >
+              <Tab label="About" value={0}/>
+              <Tab label="Store" value={1}/>
+              <Tab label="Delivery" value={2}/>
+          </Tabs>
         </Box>
         <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
           <div>
-            <IconButton
-            onClick={handleMenu}
-          >
-            <PersonOutlineOutlinedIcon />
-          </IconButton>
+            {isAuthenticated ? (
+                <Avatar 
+                  alt="Remy Sharp" 
+                  src={avatarUrl ? `http://localhost:3000${avatarUrl}` : modal} 
+                  onClick={handleMenu} 
+                  sx={{ cursor: 'pointer',
+                        transition: '0.3s',
+                        border: isAuthenticated ? '3px solidrgb(213, 151, 35)' : 'none',
+                        '&:hover': { transform: 'scale(1.1)', border: '3px solidrgb(243, 93, 33)' },
+                        '&:active': { transform: 'scale(0.95)', opacity: 0.7 },
+                        marginRight: 2
+                  }} 
+                />
+              ) : (
+                <IconButton
+                  onClick={handleMenu}
+                >
+                  <PersonOutlineOutlinedIcon />
+                </IconButton>
+              )}
           <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
@@ -146,8 +177,17 @@ function Header({ value, handleChange }) {
                 open={Boolean(anchorEl)}
                 onClose={handleCloseMenu}
               >
-                <MenuItem onClick={handleSignUp}>Sigh up</MenuItem>
-                <MenuItem onClick={handleSignIn}>Sign in</MenuItem>
+                {isAuthenticated ? (
+                <>
+                  <MenuItem onClick={userPage}>Your Page</MenuItem>
+                  <MenuItem onClick={logout}>Log out</MenuItem>
+                </>
+              ) : (
+                <>
+                <MenuItem onClick={() => navigate('/signup')}>Sign up</MenuItem>
+                <MenuItem onClick={() => navigate('/signin')}>Sign in</MenuItem>
+                </>
+              )}
               </Menu>
           </div>
           <IconButton onClick={handleOpen}><HeadsetMicOutlinedIcon /></IconButton>
@@ -184,7 +224,7 @@ function Header({ value, handleChange }) {
                   type="number"
                   variant="standard"
                   onChange={handleEmailChange}
-                  value={email}
+                  value={phone}
                 />
                 <Button
                   variant="outlined"
@@ -210,8 +250,7 @@ function Header({ value, handleChange }) {
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions style={{ alignSelf: 'center', width: '70%'}}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-                          
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}> 
                         <Button
                           onClick={handleCloseNew}
                           
@@ -221,21 +260,14 @@ function Header({ value, handleChange }) {
                             Continue
                         </Button>
                       </div>
-                        
                     </DialogActions>
-                
                 </Dialog>
             </div>
-            
           </DialogActions>
-          
       </Dialog>
-        
-      </Toolbar>
-      
+      </Toolbar>     
     </React.Fragment>
   );
 }
 
 export default Header;
-

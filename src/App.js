@@ -9,6 +9,7 @@ import Hero from "./components/Hero/Hero";
 import Store from "./components/Store/Store";
 import SignUp from "./components/Header/SignUp";
 import SignIn from "./components/Header/SignIn";
+import UserPage from "./components/Header/UserPage";
 
 function App() {
   const [value, setValue] = useState(null);
@@ -49,6 +50,7 @@ function App() {
           />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/mypage" element={<UserPage />} />
         </Routes>
       </div>
     </Router>

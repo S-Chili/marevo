@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,11 +12,24 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom'; 
+import Cookies from 'js-cookie';
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+
+  const navigate = useNavigate();
+
+  const [email, setemail] = React.useState('');
+  const [password, setpassword] = React.useState('');
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [userName, setUserName] = React.useState('');
+  const [userLastName, setUserLastName] = React.useState('');
+  const [userId, setUserId] = React.useState('');
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -24,6 +38,62 @@ export default function SignIn() {
       password: data.get('password'),
     });
   };
+
+  const handleSignIn = async () => {
+    
+    const userData = {
+      email: email.trim(),
+      password: password.trim(),
+    };
+    
+ try {
+    // Відправляємо дані на сервер
+    const response = await fetch("http://localhost:3000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+      credentials: "include", // Додаємо кукі в запит
+    });
+
+    // Перевіряємо, чи все пройшло успішно
+    if (!response.ok) {
+      throw new Error("Error submitting the form");
+    }
+
+   const data = await response.json();
+   console.log("Response from server:", data);
+   
+   Cookies.set("token", data.token, { expires: 7, secure: true });
+
+   localStorage.setItem("userFirstName", data.user.firstName);
+   localStorage.setItem("userLastName", data.user.lastName);
+   localStorage.setItem("userId", data.user._id);
+   console.log(userId);
+   
+   setUserName(data.user.firstName);
+   setUserLastName(data.user.lastName)
+   setUserId(data.user._id);
+   localStorage.setItem('showAlert', 'true');
+    setShowAlert(true);
+
+    // Встановлюємо таймер, щоб автоматично закрити алерт через 30 секунд
+    setTimeout(() => {
+      setShowAlert(false);
+      localStorage.removeItem('showAlert');
+      navigate('/'); // Перенаправлення після того, як алерт закриється
+      window.location.reload();
+    }, 2000); // 2 секунд
+
+      // Перенаправляємо користувача після входу
+    
+
+   // Відкриваємо діалог після успішної відправки
+    setemail('');
+    setpassword('');
+  } catch (error) {
+    console.error("Failed to submit the form:", error.message);
+  }
+};
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -43,6 +113,15 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          <Box sx={{ position: 'fixed', top: 20, right: 20, width: 'auto', zIndex: 999 }}>
+            {showAlert && (
+              <Stack sx={{ width: '100%' }} spacing={2}>
+                <Alert severity="success">
+                  {`Welcome, ${userName}${userLastName}! You have successfully logged in.`}
+                </Alert>
+              </Stack>
+            )}
+          </Box>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -51,6 +130,8 @@ export default function SignIn() {
               id="email"
               label="Email Address"
               name="email"
+              value={email}
+              onChange={(e) => setemail(e.target.value)}
               autoComplete="email"
               autoFocus
             />
@@ -59,6 +140,8 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
+              value={password}
+              onChange={(e) => setpassword(e.target.value)}
               label="Password"
               type="password"
               id="password"
@@ -71,6 +154,7 @@ export default function SignIn() {
             <Button
               type="submit"
               fullWidth
+              onClick={handleSignIn}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
