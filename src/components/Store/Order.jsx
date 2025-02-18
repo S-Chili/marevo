@@ -1,24 +1,29 @@
 import React from "react";
-
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 export default function Order({ open, selectedItem, handleClose }) {
   const [openNew, setOpenNew] = React.useState(false);
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
   const handleNameChange = (event) => setName(event.target.value);
   const handlePhoneChange = (event) => setPhone(event.target.value);
-  const isButtonDisabled = () => name.trim() === '' || phone.trim() === '';
+  const isButtonDisabled = () => {
+    return name.trim() === '' || phone.trim() === ''
+  };
 
   const handleCloseNew = () => {
     setOpenNew(false);
     handleClose();
   };
-     
+  
   const userId = localStorage.getItem("userId");
 
   const handleOrderSubmit = async () => {
+        setLoading(true);
         const formData = {
             userID: userId,
             name: name,
@@ -49,7 +54,9 @@ export default function Order({ open, selectedItem, handleClose }) {
             }
         } catch (error) {
             console.error("Request failed:", error);
-        }
+        } finally {
+      setLoading(false);
+    }
     };   
 
   return (
@@ -64,17 +71,26 @@ export default function Order({ open, selectedItem, handleClose }) {
                 Bouquet "{selectedItem.title}" costs {selectedItem.price} UAH.
                 Please enter your contact details, our manager will contact you within 30 minutes.
               </DialogContentText>
+              {loading ? (
+            <Stack spacing={1}>
+              <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+              <Skeleton variant="rectangular" width={210} height={40} />
+            </Stack>
+            ) : (
+              <div style={{ gap: '10%', alignItems: 'center', display: 'flex', justifyContent: 'center' }}>
+                <TextField id="standard-name" label="Your name" variant="standard" onChange={handleNameChange} />
+                <TextField id="standard-phone" label="Your phone" variant="standard" onChange={handlePhoneChange} />
+              </div>
+          )}
             </DialogContent>
             <DialogActions style={{ flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-              <TextField id="standard-name" label="Your name" variant="standard" onChange={handleNameChange} />
-              <TextField id="standard-phone" label="Your phone" variant="standard" onChange={handlePhoneChange} />
               <Button
                 variant="outlined"
                 onClick={handleOrderSubmit}
                 disabled={isButtonDisabled()}
                 style={{ backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
               >
-                Send
+                {loading ? 'Sending...' : 'Send'}
               </Button>
             </DialogActions>
           </>

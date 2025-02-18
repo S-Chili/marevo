@@ -12,6 +12,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Avatar from '@mui/material/Avatar';
 import { Box, Menu, MenuItem, Tab, Tabs, TextField } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import logo from '../../logo192.png'
 import modal from './pop up_desktop/Frame 48.jpg'
 import contact from './contact.jpg'
@@ -21,7 +23,9 @@ function Header({ value, handleChange }) {
   const navigate = useNavigate();
   const isAuthenticated = useAuth();
 
+  const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+
   const handleClose = () => {
     setOpen(false);
     setName(''); 
@@ -40,6 +44,7 @@ function Header({ value, handleChange }) {
   const avatarUrl = localStorage.getItem("avatarUrl");
  
   const handleOpenNew = async () => {
+    setLoading(true);
       // Створюємо об'єкт з ім'ям і email
     const contactData = {
       name: name.trim(),
@@ -47,6 +52,7 @@ function Header({ value, handleChange }) {
     };
 
       try {
+        
         // Відправляємо дані на сервер
         const response = await fetch("http://localhost:3000/api/contacts/", {
           method: "POST",
@@ -72,7 +78,9 @@ function Header({ value, handleChange }) {
         setPhone('');
       } catch (error) {
         console.error("Failed to submit the form:", error.message);
-      }
+      } finally {
+      setLoading(false);
+    }
    };
 
   const [name, setName] = React.useState('');
@@ -207,10 +215,14 @@ function Header({ value, handleChange }) {
                 If you have any additional questions or you want to clarify something before you make an order please fill in your contact details.
                 We will call you back.
             </DialogContentText>
-          </DialogContent>
-          <DialogActions style={{ alignSelf: 'center', width: '70%'}}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-                <TextField
+            {loading ? (
+            <Stack spacing={1}>
+              <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+              <Skeleton variant="rectangular" width={210} height={40} />
+            </Stack>
+            ) : (
+                <div style={{ display: 'flex', justifySelf: 'center', flexDirection: 'column', gap: '10px', width: '50%' }}>
+            <TextField
                   id="standard-name"
                   label="Your name"
                   type="name"
@@ -226,13 +238,18 @@ function Header({ value, handleChange }) {
                   onChange={handleEmailChange}
                   value={phone}
                 />
+                  </div>
+          )}
+          </DialogContent>
+          <DialogActions style={{ alignSelf: 'center'}}>
+              <div style={{ display: 'flex' }}>
                 <Button
                   variant="outlined"
                   onClick={handleOpenNew}
                   disabled={isButtonDisabled()}
                   style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
                 >
-                Send
+                {loading ? 'Sending...' : 'Send'}
                 </Button>
                <Dialog
                   open={openNew}

@@ -14,11 +14,13 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Input from '@mui/material/Input';
 import Avatar from '@mui/material/Avatar';
-//import { List, ListItem, ListItemText } from "@mui/material";
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 export default function ControlledAccordions() {
     const [expanded, setExpanded] = React.useState(false);
-
+    const [loading, setLoading] = React.useState(false);
+    
     const handleChange = (panel) => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
@@ -108,6 +110,7 @@ export default function ControlledAccordions() {
 
     const handleSubmit = async () => {
         await handleUploadAvatar();
+        setLoading(true);
         const rawData = {
             firstName: userName,
             lastName: userLastName,
@@ -155,7 +158,9 @@ export default function ControlledAccordions() {
             }
         } catch (error) {
             console.error("Request failed:", error);
-        }
+        } finally {
+      setLoading(false);
+    }
     };
 
     const userId = localStorage.getItem("userId");
@@ -275,79 +280,90 @@ export default function ControlledAccordions() {
                         noValidate
                         autoComplete="off"
                     >
-                        <div>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '16px' }}>
-                                <Avatar
-                                    src={previewImage || avatarUrl} 
-                                    sx={{ width: 80, height: 80, marginBottom: 2 }}
-                                />
-                               <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '12px' }}> 
-                                    <Button variant="contained" color="error" onClick={handleCancelUpload} disabled={!isImageUploaded}>
-                                        Cancel Upload
-                                    </Button>
-                                    <Button variant="contained" component="label">
-                                        Upload Photo
-                                        <Input type="file" sx={{ display: 'none' }} onChange={handleImageUpload} />
-                                    </Button>
+                        {loading ? (
+                            <Stack spacing={1}>
+                                <Skeleton variant="rectangular" width={210} height={40} />
+                                <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                                <Skeleton variant="rectangular" width={210} height={40} />
+                                <Skeleton variant="rectangular" width={210} height={40} />
+                                <Skeleton variant="rectangular" width={210} height={40} />
+                                <Skeleton variant="rectangular" width={210} height={40} />
+                            </Stack>
+                        ) : (
+                            <div>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '16px' }}>
+                                    <Avatar
+                                        src={previewImage || avatarUrl}
+                                        sx={{ width: 80, height: 80, marginBottom: 2 }}
+                                    />
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
+                                        <Button variant="contained" color="error" onClick={handleCancelUpload} disabled={!isImageUploaded}>
+                                            Cancel Upload
+                                        </Button>
+                                        <Button variant="contained" component="label">
+                                            Upload Photo
+                                            <Input type="file" sx={{ display: 'none' }} onChange={handleImageUpload} />
+                                        </Button>
+                                    </Box>
                                 </Box>
-                            </Box>
-                            <TextField
-                                id="standard-helperText"
-                                label={userName}
-                                helperText="Here you can change current name"
-                                variant="standard"
-                                onChange={(e) => setUserName(e.target.value)}
-                            />
-                            <TextField
-                                id="standard-helperText"
-                                label={userLastName}
-                                helperText="Here you can change second name"
-                                variant="standard"
-                                onChange={(e) => setUserLastName(e.target.value)}
-                            />
-                            <Box sx={{margin: '8px'}}>
-                                <FormControl>
-                                    <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-                                    <RadioGroup
-                                        aria-labelledby="demo-radio-buttons-group-label"
-                                        defaultValue="female"
-                                        name="radio-buttons-group"
-                                        sx={{flexDirection: 'row'}}
-                                    >
-                                        <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                        <FormControlLabel value="other" control={<Radio />} label="Other" />
-                                    </RadioGroup>
-                                </FormControl>
-                            </Box>
-                            <TextField
-                                id="date-of-birth"
-                                label="Date of Birth"
-                                type="date"
-                                variant="standard"
-                                InputLabelProps={{
-                                    shrink: true, // Keep the label above the input field
-                                }}
-                                helperText="Select or change your date of birth"
-                            />
-                            <Box>
                                 <TextField
-                                    id="country"
-                                    label="Country"
-                                    helperText="Select or change country"
+                                    id="standard-helperText"
+                                    label={userName}
+                                    helperText="Here you can change current name"
                                     variant="standard"
-                                />   
+                                    onChange={(e) => setUserName(e.target.value)}
+                                />
                                 <TextField
-                                    id="city"
-                                    label="City"
-                                    helperText="Select or change city"
+                                    id="standard-helperText"
+                                    label={userLastName}
+                                    helperText="Here you can change second name"
                                     variant="standard"
-                                />   
-                            </Box>
-                        </div>
+                                    onChange={(e) => setUserLastName(e.target.value)}
+                                />
+                                <Box sx={{ margin: '8px' }}>
+                                    <FormControl>
+                                        <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                                        <RadioGroup
+                                            aria-labelledby="demo-radio-buttons-group-label"
+                                            defaultValue="female"
+                                            name="radio-buttons-group"
+                                            sx={{ flexDirection: 'row' }}
+                                        >
+                                            <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                            <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                            <FormControlLabel value="other" control={<Radio />} label="Other" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                </Box>
+                                <TextField
+                                    id="date-of-birth"
+                                    label="Date of Birth"
+                                    type="date"
+                                    variant="standard"
+                                    InputLabelProps={{
+                                        shrink: true, // Keep the label above the input field
+                                    }}
+                                    helperText="Select or change your date of birth"
+                                />
+                                <Box>
+                                    <TextField
+                                        id="country"
+                                        label="Country"
+                                        helperText="Select or change country"
+                                        variant="standard"
+                                    />
+                                    <TextField
+                                        id="city"
+                                        label="City"
+                                        helperText="Select or change city"
+                                        variant="standard"
+                                    />
+                                </Box>
+                            </div>)}
+                                
                         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
                             <Button variant="contained" color="primary" onClick={handleSubmit}>
-                                Submit
+                                {loading ? 'Sending...' : 'Submit'}
                             </Button>
                         </Box>
                     </Box>

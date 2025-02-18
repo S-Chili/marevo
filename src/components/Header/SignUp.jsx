@@ -15,7 +15,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-
+import Skeleton from '@mui/material/Skeleton';
 
 const defaultTheme = createTheme();
 
@@ -37,9 +37,11 @@ export default function SignUp() {
   const [password, setpassword] = React.useState('');
   const [showAlert, setShowAlert] = React.useState(false);
   const [userName, setUserName] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
   
 
   const handleSignUp = async () => {
+    setLoading(true);
     const userData = {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
@@ -104,11 +106,9 @@ export default function SignUp() {
       setpassword('');
     } catch (error) {
       console.error("Failed:", error.message);
+    } finally {
+      setLoading(false);
     }
-
-    const cookies = document.cookie;
-    console.log(cookies); // Виведе всі куки
-    
   };
 
   return (
@@ -128,10 +128,10 @@ export default function SignUp() {
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{marginBottom: '20px'}}>
             Sign up
           </Typography>
-           <Box sx={{ position: 'fixed', top: 20, right: 20, width: 'auto', zIndex: 999 }}>
+           <Box sx={{ position: 'fixed', top: 20, right: 20, zIndex: 999 }}>
             {showAlert && (
               <Stack sx={{ width: '100%' }} spacing={2}>
                 <Alert severity="success">
@@ -142,62 +142,73 @@ export default function SignUp() {
           </Box>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  value={firstName}
-                  label="First Name"
-                  onChange={(e) => setfirstName(e.target.value)}
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  value={lastName}
-                  onChange={(e) => setlastName(e.target.value)}
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  value={email}
-                  onChange={(e) => setemail(e.target.value)}
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  value={password}
-                  onChange={(e) => setpassword(e.target.value)}
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
+              {loading ? (
+                <Stack spacing={1}>
+                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />                  <Skeleton variant="rectangular" width={210} height={40} />
+                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />                 
+                </Stack>
+              ) : (
+              <div style={{ display: 'flex', justifySelf: 'center', flexDirection: 'column', gap: '10px' }}>
+                <Grid item xs={12}>
+                  <TextField
+                    autoComplete="given-name"
+                    name="firstName"
+                    required
+                    fullWidth
+                    id="firstName"
+                    value={firstName}
+                    label="First Name"
+                    onChange={(e) => setfirstName(e.target.value)}
+                    autoFocus
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="lastName"
+                    value={lastName}
+                    onChange={(e) => setlastName(e.target.value)}
+                    label="Last Name"
+                    name="lastName"
+                    autoComplete="family-name"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    value={email}
+                    onChange={(e) => setemail(e.target.value)}
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    value={password}
+                    onChange={(e) => setpassword(e.target.value)}
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControlLabel
+                    control={<Checkbox value="allowExtraEmails" color="primary" />}
+                    label="I want to receive inspiration, marketing promotions and updates via email."
+                  />
+                </Grid>
+              </div>
+            )}
             </Grid>
             <Button
               type="submit"
@@ -206,7 +217,7 @@ export default function SignUp() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              {loading ? 'Sending...' : 'Sign Up'}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>

@@ -1,19 +1,23 @@
 import * as React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import subs from './subscribe.jpg';
 import modal from '../Header/pop up_desktop/Frame 48.jpg';
 
 export default function Subs({ open, handleClose }) {
   const [email, setEmail] = React.useState('');
   const [openNew, setOpenNew] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
 
-  const isButtonDisabled = () => email.trim() === '';
+  const isButtonDisabled = () => email.trim() === '' || loading;
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:3000/api/subscribes/", {
         method: "POST",
@@ -27,6 +31,8 @@ export default function Subs({ open, handleClose }) {
       setEmail('');
     } catch (error) {
       console.error("Failed to submit the form:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,22 +50,31 @@ export default function Subs({ open, handleClose }) {
           <DialogContentText>
             Be the first to get exclusive offers and the latest news on our product directly in your inbox.
           </DialogContentText>
+          {loading ? (
+            <Stack spacing={1}>
+              <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+              <Skeleton variant="rectangular" width={210} height={40} />
+            </Stack>
+          ) : (
+              <div style={{ display: 'flex', justifySelf: 'center', flexDirection: 'column', gap: '10px', width: '50%' }}>
+            <TextField
+              id="standard-email"
+              label="Your email"
+              type="email"
+              variant="standard"
+              onChange={handleEmailChange}
+            />
+                </div>
+          )}
         </DialogContent>
         <DialogActions style={{ flexDirection: 'column', gap: '10px', alignItems: 'center' }}>
-          <TextField
-            id="standard-email"
-            label="Your email"
-            type="email"
-            variant="standard"
-            onChange={handleEmailChange}
-          />
           <Button
             onClick={handleSubmit}
             disabled={isButtonDisabled()}
             variant="outlined"
             style={{ backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
           >
-            Send
+            {loading ? 'Sending...' : 'Send'}
           </Button>
         </DialogActions>
       </Dialog>
