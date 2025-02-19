@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useCallback } from "react";
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -54,7 +55,6 @@ export default function ControlledAccordions() {
                 setAvatarUrl(`http://localhost:3000${storedAvatar}`);
             }
         }, []);
-
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -166,28 +166,29 @@ export default function ControlledAccordions() {
     const userId = localStorage.getItem("userId");
 
      // Функція для отримання замовлень користувача
-  const fetchOrders = async () => {
-    if (!userId) return; // Якщо userId відсутній, не робимо запит
+        const fetchOrders = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const response = await fetch(`http://localhost:3000/api/orders/${userId}`);
+            const data = await response.json();
+            if (response.ok) {
+            setOrders(data);
+            } else {
+            console.error("Error fetching orders:", data.message);
+            }
+        } catch (error) {
+            console.error("Request failed:", error);
+        }
+        }, [userId]);
 
-    try {
-      const response = await fetch(`http://localhost:3000/api/orders/${userId}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setOrders(data); // Зберігаємо замовлення у стейт
-        console.log("Orders received:", data);
-      } else {
-        console.error("Error fetching orders:", data.message);
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
-    }
-  };
+        useEffect(() => {
+        fetchOrders();
+        }, [fetchOrders]);
 
   // Викликаємо fetchOrders при завантаженні компонента
-  useEffect(() => {
-    fetchOrders();
-  }, [userId]); // Залежність userId, щоб виконати запит лише після його отримання
+    useEffect(() => {
+        fetchOrders();
+    }, [fetchOrders]); // Залежність userId, щоб виконати запит лише після його отримання
 
   const deleteOrder = async (orderId) => {
     if (!orderId) return;
@@ -209,28 +210,24 @@ export default function ControlledAccordions() {
     }
   };
     
-     const fetchFavs = async () => {
-    if (!userId) return; // Якщо userId відсутній, не робимо запит
+    const fetchFavs = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const response = await fetch(`http://localhost:3000/api/favorites/${userId}`);
+            const data = await response.json();
+            if (response.ok) {
+                setFavs(data);                
+            } else {
+            console.error("Error fetching favorites:", data.message);
+            }
+        } catch (error) {
+            console.error("Request failed:", error);
+        }
+        }, [userId]);
 
-    try {
-      const response = await fetch(`http://localhost:3000/api/favorites/${userId}`);
-      const data = await response.json();
-
-      if (response.ok) {
-        setFavs(data); // Зберігаємо замовлення у стейт
-        console.log("Favorites received:", data);
-      } else {
-        console.error("Error fetching favorites:", data.message);
-      }
-    } catch (error) {
-      console.error("Request failed:", error);
-    }
-  };
-
-  // Викликаємо fetchOrders при завантаженні компонента
-  useEffect(() => {
-    fetchFavs();
-  }, [userId]);
+        useEffect(() => {
+        fetchFavs();
+        }, [fetchFavs]);
     
     const deleteFav = async (favId) => {
     if (!favId) return;
@@ -388,11 +385,11 @@ export default function ControlledAccordions() {
             {favs.map((fav) => (
                 <div key={fav._id} style={{ marginBottom: '16px', borderBottom: '1px solid #ccc', paddingBottom: '8px', display:'flex',justifyContent: 'space-between' }}>
                     <div>
-                        <Typography variant="h6">Your order: {fav.bouquetTite}</Typography>
-                        <Typography>Total: {fav.bouquetPrice}$</Typography>
+                        <Typography variant="h6">Your order: {fav.bouquetTitle}</Typography>
+                        <Typography>Total: {fav.bouquetPrice}UAH</Typography>
                         <Typography>Date: {new Date(fav.favedAt).toLocaleDateString()}</Typography>
                     </div>
-                    <div style={{display:'flex', display: 'contents'}}>
+                    <div style={{display: 'contents'}}>
                         <div>
                             <img src={fav.bouquetImg} alt={fav.title} width="100" length="100" />
                         </div>
@@ -432,10 +429,10 @@ export default function ControlledAccordions() {
                 <div key={order._id} style={{ marginBottom: '16px', borderBottom: '1px solid #ccc', paddingBottom: '8px', display:'flex',justifyContent: 'space-between' }}>
                     <div>
                         <Typography variant="h6">Your order: {order.bouquetTite}</Typography>
-                        <Typography>Total: {order.bouquetPrice}$</Typography>
+                        <Typography>Total: {order.bouquetPrice}UAH</Typography>
                         <Typography>Date: {new Date(order.orderedAt).toLocaleDateString()}</Typography>
                     </div>
-                    <div style={{display:'flex', display: 'contents'}}>
+                    <div style={{display: 'contents'}}>
                         <div>
                             <img src={order.bouquetImg} alt={order.title} width="100" length="100" />
                         </div>

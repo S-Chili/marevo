@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import useAuth from "../Header/useAuth";
 import Order from './Order';
 import flower1 from './flowersImage1.jpg';
 import flower2 from './flowersImage2.jpg';
@@ -20,12 +21,16 @@ import flower9 from './bouquet9.avif';
 import flower10 from './bouquet10.avif';
 import flower11 from './bouquet11.avif';
 import flower12 from './bouquet12.avif';
+import { useNavigate } from 'react-router';
 
 const Store = React.forwardRef(({ tabLabel }, ref) => {
   const [open, setOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState(null);
-  const [favs, setFavs] = React.useState(new Set()); // Using Set for better membership checking
+  const [favs, setFavs] = React.useState([]); // Масив замість Set
   const userId = localStorage.getItem("userId");
+  
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
 
   const handleOpen = (item) => {
     setOpen(true);
@@ -49,7 +54,7 @@ const Store = React.forwardRef(({ tabLabel }, ref) => {
 
       if (response.ok) {
         const favsData = await response.json();
-        setFavs(new Set(favsData)); // Тепер `favs` міститиме об'єкти, а не тільки `img`
+        setFavs(favsData); // Тепер `favs` міститиме об'єкти, а не тільки `img`
       } else {
         console.error("Error fetching favorites");
       }
@@ -62,7 +67,7 @@ const Store = React.forwardRef(({ tabLabel }, ref) => {
 }, [userId]);
 
 const toggleFavorite = async (item) => {
-  const existingFav = [...favs].find(fav => fav.bouquetImg === item.img);
+  const existingFav = favs.find(fav => fav.bouquetImg === item.img);
 
   if (existingFav) {
     await deleteFav(existingFav._id);
@@ -71,16 +76,8 @@ const toggleFavorite = async (item) => {
   }
 };
 
-  const handleFavSubmit = async (item) => {
-  if (!userId) {
-    console.error("User ID is missing");
-    return;
-  }
-
-  if (!item) {
-    console.error("Item is undefined");
-    return;
-  }
+ const handleFavSubmit = async (item) => {
+  if (!userId || !item) return;
 
   const formData = {
     userID: userId,
@@ -92,16 +89,14 @@ const toggleFavorite = async (item) => {
   try {
     const response = await fetch("http://localhost:3000/api/favorites", {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
       credentials: "include",
     });
 
     const data = await response.json();
     if (response.ok) {
-      setFavs(prevFavs => new Set([...prevFavs, { _id: data._id, bouquetImg: item.img }])); // Створюємо новий Set
+      setFavs(prevFavs => [...prevFavs, { _id: data.insertedId, bouquetImg: item.img }]);
       console.log("Added to favorites:", data);
     } else {
       console.error("Error adding to favorites:", data.message);
@@ -121,7 +116,7 @@ const deleteFav = async (favId) => {
     });
 
     if (response.ok) {
-      setFavs(prevFavs => new Set([...prevFavs].filter(fav => fav._id !== favId))); // Створюємо новий Set
+      setFavs(prevFavs => prevFavs.filter(fav => fav._id !== favId)); // Видаляємо елемент з масиву
       console.log("Favorite deleted successfully");
     } else {
       console.error("Error deleting favorite item");
@@ -130,6 +125,24 @@ const deleteFav = async (favId) => {
     console.error("Request failed:", error);
   }
 };
+  
+  const handleProtectedClickFav = (item) => {
+        if (!isAuthenticated) {
+            navigate('/signup'); // Перенаправлення незалогінених користувачів
+        } else {
+          
+          toggleFavorite(item);
+        }
+  };
+  
+  const handleProtectedClickOrder = (item) => {
+        if (!isAuthenticated) {
+            navigate('/signup'); // Перенаправлення незалогінених користувачів
+        } else {
+            handleOpen(item);;
+        }
+    };
+  
 
   return (
     <Box ref={ref} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '50px', paddingLeft: '24px', paddingRight: '24px' }}>
@@ -162,16 +175,18 @@ const deleteFav = async (favId) => {
                   <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                     aria-label={`Add ${item.title} to cart`}
-                    onClick={() => handleOpen(item)}
+                    onClick={() => handleProtectedClickOrder(item)}
                   >
                     <ShoppingCartOutlinedIcon />
                   </IconButton>
                   <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                     aria-label={`Add ${item.title} to favorites`}
-                    onClick={() => toggleFavorite(item)}
+                    onClick={() => handleProtectedClickFav(item)}
                   >
-{[...favs].some(fav => fav.bouquetImg === item.img) ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
+                    {favs.some(fav => fav.bouquetImg === item.img) 
+                      ? <FavoriteOutlinedIcon /> 
+                      : <FavoriteBorderOutlinedIcon />}
                   </IconButton>
                 </Box>
               }
