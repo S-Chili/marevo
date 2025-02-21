@@ -87,7 +87,6 @@ export default function SignIn() {
       setShowAlert(false);
       localStorage.removeItem('showAlert');
       navigate('/'); // Перенаправлення після того, як алерт закриється
-      window.location.reload();
     }, 2000); // 2 секунд
 
       // Перенаправляємо користувача після входу

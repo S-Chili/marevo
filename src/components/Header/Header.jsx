@@ -114,21 +114,24 @@ function Header({ value, handleChange }) {
    };
 
   const logout = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/auth/logout`, {
-        method: "GET",
-        credentials: "include", // Додає cookies у запит
-      });
-      if (response.ok) {
-        navigate("/signIn");
-         window.location.reload();// Перенаправлення на сторінку входу
-      } else {
-        console.error("Помилка логауту");
-      }
-    } catch (error) {
-      console.error("Помилка логауту:", error);
+  try {
+    const response = await fetch(`${API_URL}/api/auth/logout`, {
+      method: "GET",
+      credentials: "include", // Додає cookies у запит
+    });
+
+    if (response.ok) {
+      localStorage.clear(); // Очищаємо localStorage при логауті
+      navigate("/signIn");
+      window.location.reload(); // Перезавантаження сторінки для застосування змін
+    } else {
+      console.error("Помилка логауту");
     }
-  };
+  } catch (error) {
+    console.error("Помилка логауту:", error);
+  }
+};
+
  
   const handleHome = () => {
     navigate('/');

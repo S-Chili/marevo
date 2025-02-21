@@ -38,6 +38,7 @@ export default function SignUp() {
   const [showAlert, setShowAlert] = React.useState(false);
   const [userName, setUserName] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const [userId, setUserId] = React.useState('');
   
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -86,7 +87,10 @@ export default function SignUp() {
       }
 
       const loginData = await loginResponse.json();
-         setUserName(data.firstName);
+      localStorage.setItem("userId", data.user._id);
+       console.log(userId);
+      setUserName(data.firstName);
+      setUserId(data.user._id);
    localStorage.setItem('showAlert', 'true');
     setShowAlert(true);
 
@@ -95,7 +99,6 @@ export default function SignUp() {
           setShowAlert(false);
           localStorage.removeItem('showAlert');
           navigate('/'); // Перенаправлення після того, як алерт закриється
-          window.location.reload();
         }, 2000); // 2 секунд
 
       console.log("Login success:", loginData);
