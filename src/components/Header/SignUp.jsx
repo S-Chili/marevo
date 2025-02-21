@@ -39,6 +39,7 @@ export default function SignUp() {
   const [userName, setUserName] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleSignUp = async () => {
     setLoading(true);
@@ -51,7 +52,7 @@ export default function SignUp() {
     
     try {
       // Відправляємо дані на сервер для реєстрації
-      const response = await fetch("http://localhost:3000/api/auth/register", {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -68,7 +69,7 @@ export default function SignUp() {
       console.log("Response from server:", data);
 
       // Після реєстрації автоматично виконуємо логін
-      const loginResponse = await fetch("http://localhost:3000/api/auth/login", {
+      const loginResponse = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

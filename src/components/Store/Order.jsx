@@ -8,6 +8,8 @@ export default function Order({ open, selectedItem, handleClose }) {
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const handleNameChange = (event) => setName(event.target.value);
   const handlePhoneChange = (event) => setPhone(event.target.value);
@@ -36,7 +38,7 @@ export default function Order({ open, selectedItem, handleClose }) {
         console.log("formData:", formData);
 
         try {
-            const response = await fetch("http://localhost:3000/api/orders", {
+            const response = await fetch(`${API_URL}/api/orders`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",

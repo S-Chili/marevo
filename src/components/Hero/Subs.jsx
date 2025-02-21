@@ -13,13 +13,14 @@ export default function Subs({ open, handleClose }) {
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
   };
-
+    
+  const API_URL = process.env.REACT_APP_API_URL;
   const isButtonDisabled = () => email.trim() === '' || loading;
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/subscribes/", {
+      const response = await fetch(`${API_URL}/api/subscribes/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),

@@ -22,6 +22,7 @@ import useAuth from '../Header/useAuth';
 function Header({ value, handleChange }) {
   const navigate = useNavigate();
   const isAuthenticated = useAuth();
+  const API_URL = process.env.REACT_APP_API_URL;
 
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -54,7 +55,7 @@ function Header({ value, handleChange }) {
       try {
         
         // Відправляємо дані на сервер
-        const response = await fetch("http://localhost:3000/api/contacts/", {
+        const response = await fetch(`${API_URL}/api/contacts/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -114,7 +115,7 @@ function Header({ value, handleChange }) {
 
   const logout = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/auth/logout", {
+      const response = await fetch(`${API_URL}/api/auth/logout`, {
         method: "GET",
         credentials: "include", // Додає cookies у запит
       });
@@ -153,7 +154,7 @@ function Header({ value, handleChange }) {
             {isAuthenticated ? (
                 <Avatar 
                   alt="Remy Sharp" 
-                  src={avatarUrl ? `http://localhost:3000${avatarUrl}` : modal} 
+                  src={avatarUrl ? `${API_URL}${avatarUrl}` : modal} 
                   onClick={handleMenu} 
                   sx={{ cursor: 'pointer',
                         transition: '0.3s',

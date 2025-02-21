@@ -29,6 +29,7 @@ const Store = React.forwardRef(({ tabLabel }, ref) => {
   const [favs, setFavs] = React.useState([]); // Масив замість Set
   const userId = localStorage.getItem("userId");
   
+  const API_URL = process.env.REACT_APP_API_URL;
   const isAuthenticated = useAuth();
   const navigate = useNavigate();
 
@@ -47,7 +48,7 @@ const Store = React.forwardRef(({ tabLabel }, ref) => {
     if (!userId) return;
 
     try {
-      const response = await fetch(`http://localhost:3000/api/favorites/${userId}`, {
+      const response = await fetch(`${API_URL}/api/favorites/${userId}`, {
         method: "GET",
         credentials: "include",
       });
@@ -64,7 +65,7 @@ const Store = React.forwardRef(({ tabLabel }, ref) => {
   };
 
   fetchFavorites();
-}, [userId]);
+}, [API_URL, userId]);
 
 const toggleFavorite = async (item) => {
   const existingFav = favs.find(fav => fav.bouquetImg === item.img);
@@ -87,7 +88,7 @@ const toggleFavorite = async (item) => {
   };
 
   try {
-    const response = await fetch("http://localhost:3000/api/favorites", {
+    const response = await fetch(`${API_URL}/api/favorites`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -110,7 +111,7 @@ const deleteFav = async (favId) => {
   if (!favId) return;
 
   try {
-    const response = await fetch(`http://localhost:3000/api/favorites/${favId}`, {
+    const response = await fetch(`${API_URL}/api/favorites/${favId}`, {
       method: "DELETE",
       credentials: "include",
     });

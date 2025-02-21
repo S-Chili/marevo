@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const hasCheckedAuth = useRef(false); // Додаємо реф для перевірки
-
+  const API_URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const checkAuth = async () => {
       // Якщо вже перевіряли аутентифікацію, не робимо повторний запит
@@ -13,7 +13,7 @@ const useAuth = () => {
       hasCheckedAuth.current = true; // Мітка, що запит зроблено
 
       try {
-        const response = await fetch("http://localhost:3000/api/auth/check", {
+        const response = await fetch(`${API_URL}/api/auth/check`, {
           method: "GET",
           credentials: "include",
         });
@@ -29,7 +29,7 @@ const useAuth = () => {
     };
 
     checkAuth();
-  }, []);
+  }, [API_URL]);
 
   return isAuthenticated;
 };

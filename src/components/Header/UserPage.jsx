@@ -35,26 +35,28 @@ export default function ControlledAccordions() {
     const [orders, setOrders] = useState([]);
     const [favs, setFavs] = useState([]);
 
-        useEffect(() => {
-            const storedName = localStorage.getItem("userFirstName");
-            if (storedName) {
-                setUserName(storedName);
-            }
-        }, []);
+    const API_URL = process.env.REACT_APP_API_URL;
+    
+    useEffect(() => {
+        const storedName = localStorage.getItem("userFirstName");
+        if (storedName) {
+            setUserName(storedName);
+        }
+    }, []);
 
-        useEffect(() => {
-            const storedLastName = localStorage.getItem("userLastName");
-            if (storedLastName) {
-                setUserLastName(storedLastName);
-            }
-        }, []);
+    useEffect(() => {
+        const storedLastName = localStorage.getItem("userLastName");
+        if (storedLastName) {
+            setUserLastName(storedLastName);
+        }
+    }, []);
         
-        useEffect(() => {
-            const storedAvatar = localStorage.getItem("avatarUrl");
-            if (storedAvatar) {
-                setAvatarUrl(`http://localhost:3000${storedAvatar}`);
-            }
-        }, []);
+    useEffect(() => {
+        const storedAvatar = localStorage.getItem("avatarUrl");
+        if (storedAvatar) {
+            setAvatarUrl(`${API_URL}${storedAvatar}`);
+        }
+    }, [API_URL]);
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -89,7 +91,7 @@ export default function ControlledAccordions() {
     formData.append("avatar", selectedImage);
 
     try {
-        const response = await fetch("http://localhost:3000/api/auth/upload-avatar", {
+        const response = await fetch(`${API_URL}/api/auth/upload-avatar`, {
             method: "POST",
             body: formData,
             credentials: "include",
@@ -128,7 +130,7 @@ export default function ControlledAccordions() {
         console.log("Filtered formData:", formData);
 
         try {
-            const response = await fetch("http://localhost:3000/api/auth/update", {
+            const response = await fetch(`${API_URL}/api/auth/update`, {
                 method: "PATCH",
                 headers: { 
                     "Content-Type": "application/json",
@@ -163,13 +165,16 @@ export default function ControlledAccordions() {
     }
     };
 
-    const userId = localStorage.getItem("userId");
+    const userId = localStorage.getItem("userId") || "";
 
      // Функція для отримання замовлень користувача
         const fetchOrders = useCallback(async () => {
-        if (!userId) return;
+        if (!userId) {
+            console.error("User ID is missing!");
+            return;
+        }
         try {
-            const response = await fetch(`http://localhost:3000/api/orders/${userId}`);
+            const response = await fetch(`${API_URL}/api/orders/${userId}`);
             const data = await response.json();
             if (response.ok) {
             setOrders(data);
@@ -179,7 +184,7 @@ export default function ControlledAccordions() {
         } catch (error) {
             console.error("Request failed:", error);
         }
-        }, [userId]);
+        }, [API_URL,userId]);
 
         useEffect(() => {
         fetchOrders();
@@ -194,7 +199,7 @@ export default function ControlledAccordions() {
     if (!orderId) return;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/orders/${orderId}`, {
+        const response = await fetch(`${API_URL}/api/orders/${orderId}`, {
             method: "DELETE",
             credentials: "include",
         });
@@ -213,7 +218,7 @@ export default function ControlledAccordions() {
     const fetchFavs = useCallback(async () => {
         if (!userId) return;
         try {
-            const response = await fetch(`http://localhost:3000/api/favorites/${userId}`);
+            const response = await fetch(`${API_URL}/api/favorites/${userId}`);
             const data = await response.json();
             if (response.ok) {
                 setFavs(data);                
@@ -223,17 +228,17 @@ export default function ControlledAccordions() {
         } catch (error) {
             console.error("Request failed:", error);
         }
-        }, [userId]);
+        }, [API_URL, userId]);
 
-        useEffect(() => {
-        fetchFavs();
-        }, [fetchFavs]);
+    useEffect(() => {
+    fetchFavs();
+    }, [fetchFavs]);
     
     const deleteFav = async (favId) => {
     if (!favId) return;
     console.log(favId);
     try {
-        const response = await fetch(`http://localhost:3000/api/favorites/${favId}`, {
+        const response = await fetch(`${API_URL}/api/favorites/${favId}`, {
             method: "DELETE",
             credentials: "include",
         });
