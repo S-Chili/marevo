@@ -10,8 +10,11 @@ import { Button, Tab, Tabs } from '@mui/material';
 import FaceLogo from './facebook.png';
 import InstaLogo from './instagram.png';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function Copyright() {
+
   return (
     <Typography variant="body2" color='lightgray' sx={{textAlign: 'center'}}>
       {'Copyright © '}
@@ -28,7 +31,7 @@ function Copyright() {
 const defaultTheme = createTheme();
 
 const ScrollToTopButton = () => {
-  const [showButton, setShowButton] = useState(false);
+  const [showButton, setShowButton] = useState(false);  
 
   const handleScroll = () => {
     if (window.pageYOffset > 300) {
@@ -76,9 +79,16 @@ const ScrollToTopButton = () => {
 export default function Footer({ value, handleChange }) {
   const navigate = useNavigate();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const handleLogoClick = () => {
     navigate('/');
   };
+
+   if (isMobile) {
+    return null; // на мобільному футер не показуємо
+  } 
 
   return (
     <ThemeProvider theme={defaultTheme}>

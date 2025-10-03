@@ -57,7 +57,7 @@ const Home = ({ value, handleChange }) => {
         <Alert
           severity="info"
           onClick={handleAlertClick}
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", marginTop: "16px" }}
         >
           Для того щоб відчути покращений користувацький досвід, а також
           можливості замовлення квітів, пройдіть швидку реєстрацію та/або

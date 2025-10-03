@@ -1,293 +1,191 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import HeadsetMicOutlinedIcon from '@mui/icons-material/HeadsetMicOutlined';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Avatar from '@mui/material/Avatar';
-import { Box, Menu, MenuItem, Tab, Tabs, TextField } from '@mui/material';
-import Skeleton from '@mui/material/Skeleton';
-import Stack from '@mui/material/Stack';
-import logo from '../../logo192.png'
-import modal from './pop up_desktop/Frame 48.jpg'
-import contact from './contact.jpg'
-import useAuth from '../Header/useAuth';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Drawer,
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  Link,
+  Button,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import HeadsetMicOutlinedIcon from "@mui/icons-material/HeadsetMicOutlined";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import FaceLogo from "../Footer/facebook.png";
+import InstaLogo from "../Footer/instagram.png";
+import logo from "../../logo192.png";
+
+const Copyright = () => {
+
+  return (
+    <Typography variant="body2" color='lightgray' sx={{textAlign: 'center'}}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://github.com/S-Chili">
+        Check developer
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 
 function Header({ value, handleChange }) {
   const navigate = useNavigate();
-  const isAuthenticated = useAuth();
-  const API_URL = process.env.REACT_APP_API_URL;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [loading, setLoading] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-    setName(''); 
-    setPhone('');
-  };
-  const handleOpen = () => {
-    setOpen(true);
+  const toggleDrawer = (open) => () => {
+    setDrawerOpen(open);
   };
 
-  const [openNew, setOpenNew] = React.useState(false);
-  const handleCloseNew = () => {
-      setOpenNew(false);
-      setOpen(false);
+  const toggleDrawerClose = () => {
+    setDrawerOpen(false);
   };
 
-  const avatarUrl = localStorage.getItem("avatarUrl");
- 
-  const handleOpenNew = async () => {
-    setLoading(true);
-      // Створюємо об'єкт з ім'ям і email
-    const contactData = {
-      name: name.trim(),
-      phone: phone.trim(),
-    };
-
-      try {
-        
-        // Відправляємо дані на сервер
-        const response = await fetch(`${API_URL}/api/contacts/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Важливо для відправки cookies
-          body: JSON.stringify(contactData),
-        });
-
-        // Перевіряємо, чи все пройшло успішно
-        if (!response.ok) {
-          const errorData = await response.text();  // Якщо сервер повертає текстову помилку
-          throw new Error(errorData || 'Error submitting the form');
-        }
-
-        const data = await response.json();
-        console.log("Response from server:", data);
-
-        // Відкриваємо діалог після успішної відправки
-        setOpenNew(true);
-        setName('');
-        setPhone('');
-      } catch (error) {
-        console.error("Failed to submit the form:", error.message);
-      } finally {
-      setLoading(false);
-    }
-   };
-
-  const [name, setName] = React.useState('');
-  const [phone, setPhone] = React.useState('');
-
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
-
-  const handleEmailChange = (event) => {
-    setPhone(event.target.value);
-  };
-
-  const isButtonDisabled = () => {
-    return name.trim() === '' || phone.trim() === '';
-  };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-  };
-
-  const userPage = () => {
-    navigate("/mypage");
-   };
-
-  const logout = async () => {
-  try {
-    const response = await fetch(`${API_URL}/api/auth/logout`, {
-      method: "GET",
-      credentials: "include", // Додає cookies у запит
-    });
-
-    if (response.ok) {
-      localStorage.clear(); // Очищаємо localStorage при логауті
-      navigate("/signIn");
-      window.location.reload(); // Перезавантаження сторінки для застосування змін
-    } else {
-      console.error("Помилка логауту");
-    }
-  } catch (error) {
-    console.error("Помилка логауту:", error);
-  }
-};
-
- 
   const handleHome = () => {
-    navigate('/');
-  }
+    navigate("/");
+    setDrawerOpen(false);
+  };
 
   return (
-    <React.Fragment>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between' }}>
-        <Button size="small" onClick={handleHome}>
-          <img src={logo} alt="Logo" style={{ width: 52, height: 62 }}/>
-        </Button>
-        <Box sx={{ display: 'flex', height: '100%' }}>
-          <Tabs
-              value={value === null ? false : value} onChange={handleChange} aria-label="Tabs"
-          >
-              <Tab label="About" value={0}/>
-              <Tab label="Store" value={1}/>
-              <Tab label="Delivery" value={2}/>
-          </Tabs>
-        </Box>
-        <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-          <div>
-            {isAuthenticated ? (
-                <Avatar 
-                  alt="Remy Sharp" 
-                  src={avatarUrl ? `${API_URL}${avatarUrl}` : modal} 
-                  onClick={handleMenu} 
-                  sx={{ cursor: 'pointer',
-                        transition: '0.3s',
-                        border: isAuthenticated ? '3px solidrgb(213, 151, 35)' : 'none',
-                        '&:hover': { transform: 'scale(1.1)', border: '3px solidrgb(243, 93, 33)' },
-                        '&:active': { transform: 'scale(0.95)', opacity: 0.7 },
-                        marginRight: 2
-                  }} 
-                />
-              ) : (
-                <IconButton
-                  onClick={handleMenu}
-                >
-                  <PersonOutlineOutlinedIcon />
-                </IconButton>
-              )}
-          <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleCloseMenu}
-              >
-                {isAuthenticated ? (
-                <>
-                  <MenuItem onClick={userPage}>Your Page</MenuItem>
-                  <MenuItem onClick={logout}>Log out</MenuItem>
-                </>
-              ) : (
-                <>
-                <MenuItem onClick={() => navigate('/signup')}>Sign up</MenuItem>
-                <MenuItem onClick={() => navigate('/signin')}>Sign in</MenuItem>
-                </>
-              )}
-              </Menu>
-          </div>
-          <IconButton onClick={handleOpen}><HeadsetMicOutlinedIcon /></IconButton>
-        </Box>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
+    <>
+      <AppBar position="static" color="default" elevation={0}>
+        <Toolbar
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
         >
-          <img src={contact} alt="greetengsflower"/>
-          <DialogTitle id="alert-dialog-title">
-            {"Contact us"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                If you have any additional questions or you want to clarify something before you make an order please fill in your contact details.
-                We will call you back.
-            </DialogContentText>
-            {loading ? (
-            <Stack spacing={1}>
-              <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-              <Skeleton variant="rectangular" width={210} height={40} />
-            </Stack>
-            ) : (
-                <div style={{ display: 'flex', justifySelf: 'center', flexDirection: 'column', gap: '10px', width: '50%' }}>
-            <TextField
-                  id="standard-name"
-                  label="Your name"
-                  type="name"
-                  variant="standard"
-                  onChange={handleNameChange}
-                  value={name}
-                />
-                <TextField
-                  id="standard-email"
-                  label="Your phone"
-                  type="number"
-                  variant="standard"
-                  onChange={handleEmailChange}
-                  value={phone}
-                />
-                  </div>
+          {/* Logo */}
+          <Button size="small" onClick={handleHome}>
+            <img src={logo} alt="Logo" style={{ width: 52, height: 62 }} />
+          </Button>
+
+          {/* Desktop nav */}
+          {!isMobile && (
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label="About" value={0} />
+              <Tab label="Store" value={1}  />
+              <Tab label="Delivery" value={2} />
+            </Tabs>
           )}
-          </DialogContent>
-          <DialogActions style={{ alignSelf: 'center'}}>
-              <div style={{ display: 'flex' }}>
-                <Button
-                  variant="outlined"
-                  onClick={handleOpenNew}
-                  disabled={isButtonDisabled()}
-                  style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
-                >
-                {loading ? 'Sending...' : 'Send'}
-                </Button>
-               <Dialog
-                  open={openNew}
-                  onClose={handleCloseNew}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                    <img src={modal} alt="greetengsflower" style={{ padding: '64px' }}/>
-                    <DialogTitle id="alert-dialog-title">
-                    {"Thank you ❤️"}
-                    </DialogTitle>
-                    <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
-                        We have received your contact details and will reach you soon.
-                      </DialogContentText>
-                    </DialogContent>
-                    <DialogActions style={{ alignSelf: 'center', width: '70%'}}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}> 
-                        <Button
-                          onClick={handleCloseNew}
-                          
-                          variant="outlined"
-                          style={{ marginBottom: '32px', backgroundColor: '#ff4e00', color: 'white', padding: '6px 24px' }}
-                        >
-                            Continue
-                        </Button>
-                      </div>
-                    </DialogActions>
-                </Dialog>
-            </div>
-          </DialogActions>
-      </Dialog>
-      </Toolbar>     
-    </React.Fragment>
+
+          {/* Right icons */}
+          <Box>
+            <IconButton>
+              <PersonOutlineOutlinedIcon />
+            </IconButton>
+            <IconButton>
+              <HeadsetMicOutlinedIcon />
+            </IconButton>
+
+            {/* Mobile burger */}
+            {isMobile && (
+              <IconButton onClick={toggleDrawer(true)}>
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      {/* Drawer */}
+<Drawer
+  anchor="right"
+  open={drawerOpen}
+  onClose={toggleDrawerClose}
+  PaperProps={{
+    sx: {
+      width: 300,
+      backgroundColor: "#b0b0b0",
+      borderLeft: "2px solid #eee",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between", // головне — розкидає top/bottom
+    },
+  }}
+>
+  {/* Верхній контент */}
+  <Box
+    sx={{
+      p: 3,
+      display: "flex",
+      flexDirection: "column",
+      gap: 3,
+      flexGrow: 1, // займає весь простір і “виштовхує” футер вниз
+    }}
+    role="presentation"
+  >
+    {/* Навігація */}
+    <Box sx={{ borderBottom: "1px solid #ddd", pb: 2 }}>
+      <Tabs
+        orientation="vertical"
+        value={value}
+        sx={{
+          "& .MuiTab-root": { alignItems: "flex-start", textTransform: "none" },
+        }}
+      >
+        <Tab label="About" value={0} onClick={() => { handleChange(null, 0); setDrawerOpen(false); }} />
+        <Tab label="Store" value={1} onClick={() => { handleChange(null, 1); setDrawerOpen(false); }} />
+        <Tab label="Delivery" value={2} onClick={() => { handleChange(null, 2); setDrawerOpen(false); }} />
+      </Tabs>
+    </Box>
+
+    {/* Opening times */}
+    <Box>
+      <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+        Opening times
+      </Typography>
+      <Typography variant="body2">Every day</Typography>
+      <Typography variant="body2">9:00 – 22:00</Typography>
+    </Box>
+
+    {/* Contacts */}
+    <Box>
+      <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+        Contacts
+      </Typography>
+      <Typography variant="body2">
+        <Link href="tel:+380631234567" underline="hover" color="inherit">
+          📞 +38 063 123 45 67
+        </Link>
+      </Typography>
+      <Typography variant="body2">
+        <Link href="mailto:marevostudio@example.com" underline="hover" color="inherit">
+          ✉️ marevostudio@example.com
+        </Link>
+      </Typography>
+      <Typography variant="body2">📍 Reitarska Street, 11</Typography>
+      <Typography variant="body2">Kyiv, Ukraine</Typography>
+    </Box>
+  </Box>
+
+  {/* Нижній блок — завжди внизу */}
+  <Box sx={{ p: 2, borderTop: "1px solid #ddd" }}>
+    <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 1 }}>
+      <IconButton href="https://facebook.com" target="_blank">
+        <img src={FaceLogo} alt="Facebook" width={26} />
+      </IconButton>
+      <IconButton href="https://instagram.com" target="_blank">
+        <img src={InstaLogo} alt="Instagram" width={26} />
+      </IconButton>
+    </Box>
+    <Copyright />
+  </Box>
+</Drawer>
+
+
+    </>
   );
 }
 
