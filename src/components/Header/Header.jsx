@@ -57,13 +57,14 @@ function Header({ value, handleChange }) {
 
   return (
     <>
-      <AppBar position="static" color="default" elevation={0}>
+      <AppBar position="static" color="default" elevation={0} sx={{ backgroundColor: "#fafafadf" }}>
         <Toolbar
           sx={{
             borderBottom: 1,
             borderColor: "divider",
             display: "flex",
             justifyContent: "space-between",
+            color: "white",
           }}
         >
           {/* Logo */}
@@ -122,7 +123,7 @@ function Header({ value, handleChange }) {
       display: "flex",
       flexDirection: "column",
       gap: 3,
-      flexGrow: 1, // займає весь простір і “виштовхує” футер вниз
+      flexGrow: 1, 
     }}
     role="presentation"
   >
