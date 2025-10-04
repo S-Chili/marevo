@@ -16,12 +16,12 @@ const Delivery = React.forwardRef(({ tabLabel }, ref) => {
           noWrap
           sx={{ 
             flexShrink: 0, 
-            fontSize: '2.5rem',
+            fontSize: { xs: '1.5rem', md: '2.5rem' },
             whiteSpace: 'nowrap',
             textAlign: 'start',
             paddingLeft: '8px',
             paddingRight: '24px',
-            margin: '16px 0 16px 0', // Встановити верхній та нижній відступ
+            margin: '16px 0 16px 0', 
           }}
         >
           Delivery {tabLabel}
@@ -36,7 +36,7 @@ const Delivery = React.forwardRef(({ tabLabel }, ref) => {
                   </ListItemIcon>
                       <ListItemText
                           primary="Choose your bouquet and make an order on website"
-                          primaryTypographyProps={{ sx: { fontSize: '1.75rem' } }}
+                          primaryTypographyProps={{ sx: { fontSize: { xs: '1.2rem', md: '1.8rem' } } }}
                   />
                   </ListItem>
                   <ListItem>
@@ -46,8 +46,7 @@ const Delivery = React.forwardRef(({ tabLabel }, ref) => {
                       <ListItemText
                     primary="Wait for the call to clarify the details of the order.
 You can pay online or to the courier"
-                    primaryTypographyProps={{ sx: { fontSize: '1.75rem' } }}
-
+                          primaryTypographyProps={{ sx: { fontSize: { xs: '1.2rem', md: '1.8rem' } } }}
                   />
                   </ListItem>
                   <ListItem>
@@ -57,7 +56,7 @@ You can pay online or to the courier"
                       <ListItemText
                     primary="Wait for the delivery at the selected time or pick up
 the order from the store "
-                    primaryTypographyProps={{ sx: { fontSize: '1.75rem' } }}
+                          primaryTypographyProps={{ sx: { fontSize: { xs: '1.2rem', md: '1.8rem' } } }}
                    />
                   </ListItem>
                   <ListItem>
@@ -66,7 +65,7 @@ the order from the store "
                   </ListItemIcon>
                       <ListItemText
                           primary="Make someone happy or enjoy yourself"
-                          primaryTypographyProps={{ sx: { fontSize: '1.75rem' } }}
+                          primaryTypographyProps={{ sx: { fontSize: { xs: '1.2rem', md: '1.8rem' } } }}
                   />
                 </ListItem>
             </List>

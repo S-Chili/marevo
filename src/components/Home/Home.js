@@ -3,9 +3,9 @@ import { Alert, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Hero from "../Hero/Hero";
 import About from "../About/About";
-// import Store from "../Store/Store";
-// import Delivery from "../Delivery/Delivery";
-// import Footer from "../Footer/Footer";
+import Store from "../Store/Store";
+import Delivery from "../Delivery/Delivery";
+import Footer from "../Footer/Footer";
 import useAuth from "../Header/useAuth";
 
 const Home = ({ value, handleChange }) => {
@@ -24,8 +24,8 @@ const Home = ({ value, handleChange }) => {
       }
     }, 2000);
 
-    return () => clearTimeout(timer); // Очищаємо таймер при скасуванні або зміні isAuthenticated
-  }, [isAuthenticated, open]); // Залежність від isAuthenticated і open
+    return () => clearTimeout(timer);
+  }, [isAuthenticated, open]);
 
   const handleAlertClick = () => {
     setOpen(false);
@@ -67,9 +67,9 @@ const Home = ({ value, handleChange }) => {
 
       <Hero />
       <About ref={aboutRef} />
-      {/* <Store ref={storeRef} /> */}
-      {/* <Delivery ref={deliveryRef} /> */}
-      {/* <Footer value={value} handleChange={handleChange} /> */}
+      <Store ref={storeRef} />
+      <Delivery ref={deliveryRef} />
+      <Footer value={value} handleChange={handleChange} />
     </>
   );
 };
