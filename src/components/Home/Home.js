@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Alert, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Hero from "../Hero/Hero";
-// import About from "../About/About";
+import About from "../About/About";
 // import Store from "../Store/Store";
 // import Delivery from "../Delivery/Delivery";
 // import Footer from "../Footer/Footer";
@@ -66,7 +66,7 @@ const Home = ({ value, handleChange }) => {
       </Snackbar>
 
       <Hero />
-      {/* <About ref={aboutRef} /> */}
+      <About ref={aboutRef} />
       {/* <Store ref={storeRef} /> */}
       {/* <Delivery ref={deliveryRef} /> */}
       {/* <Footer value={value} handleChange={handleChange} /> */}

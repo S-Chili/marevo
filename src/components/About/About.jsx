@@ -14,32 +14,71 @@ const About = React.forwardRef(({ tabLabel }, ref) => {
           noWrap
           sx={{ 
             flexShrink: 0, 
-            fontSize: '2.5rem',
+            fontSize: { xs: '1.5rem', md: '2.5rem' },
             whiteSpace: 'nowrap',
             textAlign: 'start',
             paddingLeft: '8px',
             paddingRight: '24px',
-            margin: '16px 0 16px 0', // Встановити верхній та нижній відступ
+            margin: '16px 0 16px 0', 
           }}
         >
           About {tabLabel}
         </Typography>
         <hr style={{ flex: 1, border: 'none', borderBottom: '2px solid black', margin: '0', marginRight: '8px',}} />
       </div>
-      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: '80px' }}>
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between', 
+          width: '100%', 
+          
+          flexDirection: {
+            xs: 'column', 
+            md: 'row',    
+          },
+          gap: {
+            xs: '24px',
+            md: '80px',
+          }
+        }}
+      >
         <Typography
           component="h5"
           variant="h5"
           color="inherit"
           align="center"
-          sx={{ maxWidth: '100%', margin: '16px 0', textAlign: 'justify', flex: 0.7 }}
+          sx={{ 
+            maxWidth: '100%', 
+            margin: '16px 0', 
+            textAlign: { xs: 'start', md: 'justify' }, 
+            fontSize: { xs: '1.2rem', md: '1.8rem' },
+
+            flex: { xs: 'none', md: 0.8 }, 
+            width: { xs: '100%', md: 'auto' },
+            
+            order: { xs: 1, md: 1 },
+          }}
         >
           We are a minimalistic flower studio. We love people and flowers.
           Therefore, every day we give people the beauty and joy creating stylish and modern masterpieces.
           Every bouquet we create is unique as you are.
         </Typography>   
-        <img src={about} alt="greetengsflower" style={{ maxWidth: '100%', height: 'auto', flex: 0.3 }} />  
-      </div>        
+        
+        <Box
+          component="img"
+          src={about}
+          alt="greetengsflower"
+          sx={{ 
+            flex: { xs: 'none', md: 0.2 }, 
+            maxWidth: {xs: '100%', md: '60%'},
+            height: 'auto',
+            width: { xs: '100%', md: 'auto' },
+            
+            order: { xs: 2, md: 2 },
+          }}
+        /> 
+      </Box>        
     </Box>
   );
 });
