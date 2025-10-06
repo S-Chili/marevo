@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/marevo/static/css/main.04ecfd20.css",
-    "main.js": "/marevo/static/js/main.c359e0bf.js",
-    "static/js/453.9bfed5e7.chunk.js": "/marevo/static/js/453.9bfed5e7.chunk.js",
+    "main.js": "/marevo/static/js/main.e7510e2e.js",
+    "static/js/453.a5fa3608.chunk.js": "/marevo/static/js/453.a5fa3608.chunk.js",
     "static/media/delivery.png": "/marevo/static/media/delivery.7b40373b01e6018eb338.png",
     "static/media/bouquet7.png": "/marevo/static/media/bouquet7.0355172a5a80b659ad31.png",
     "static/media/bouquet4.png": "/marevo/static/media/bouquet4.98a2dca987c42a6e5e9a.png",
@@ -27,11 +27,11 @@
     "static/media/marevo_logo.png": "/marevo/static/media/marevo_logo.1d439f7cbc7d57c1a0ec.png",
     "index.html": "/marevo/index.html",
     "main.04ecfd20.css.map": "/marevo/static/css/main.04ecfd20.css.map",
-    "main.c359e0bf.js.map": "/marevo/static/js/main.c359e0bf.js.map",
-    "453.9bfed5e7.chunk.js.map": "/marevo/static/js/453.9bfed5e7.chunk.js.map"
+    "main.e7510e2e.js.map": "/marevo/static/js/main.e7510e2e.js.map",
+    "453.a5fa3608.chunk.js.map": "/marevo/static/js/453.a5fa3608.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.04ecfd20.css",
-    "static/js/main.c359e0bf.js"
+    "static/js/main.e7510e2e.js"
   ]
 }
