@@ -17,9 +17,11 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import HeadsetMicOutlinedIcon from "@mui/icons-material/HeadsetMicOutlined";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import useAuth from "./useAuth"; 
 import FaceLogo from "../Footer/facebook.png";
 import InstaLogo from "../Footer/instagram.png";
 import logo from "../../logo192.png";
+import CallRequestModal from "./CallRequestModal";
 
 const Copyright = () => {
 
@@ -39,9 +41,11 @@ function Header({ value, handleChange }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isAuthenticated = useAuth();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+  const [callModalOpen, setCallModalOpen] = useState(false);
+  
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
   };
@@ -54,6 +58,17 @@ function Header({ value, handleChange }) {
     navigate("/");
     setDrawerOpen(false);
   };
+
+  const handleUserIconClick = () => {
+    if (isAuthenticated) {
+      navigate("/userpage"); 
+    } else {
+      navigate("/signup");
+    }
+  };
+
+  const handleOpenCallModal = () => setCallModalOpen(true);
+  const handleCloseCallModal = () => setCallModalOpen(false);
 
   return (
     <>
@@ -83,11 +98,11 @@ function Header({ value, handleChange }) {
 
           {/* Right icons */}
           <Box>
-            <IconButton>
+            <IconButton onClick={handleUserIconClick}>
               <PersonOutlineOutlinedIcon />
             </IconButton>
             <IconButton>
-              <HeadsetMicOutlinedIcon />
+              <HeadsetMicOutlinedIcon onClick={handleOpenCallModal}/>
             </IconButton>
 
             {/* Mobile burger */}
@@ -112,7 +127,7 @@ function Header({ value, handleChange }) {
       borderLeft: "2px solid #eee",
       display: "flex",
       flexDirection: "column",
-      justifyContent: "space-between", // головне — розкидає top/bottom
+      justifyContent: "space-between", 
     },
   }}
 >
@@ -185,7 +200,8 @@ function Header({ value, handleChange }) {
   </Box>
 </Drawer>
 
-
+    {/* 5. ДОДАНО МОДАЛЬНЕ ВІКНО */}
+      <CallRequestModal open={callModalOpen} handleClose={handleCloseCallModal} />
     </>
   );
 }

@@ -11,8 +11,6 @@ import flower2 from "./flowers1.jpg";
 import flower3 from "./flowers3.jpg";
 import Subs from "./Subs";
 
-// Прибираємо DESKTOP_PADDING_Y
-
 export default function Hero() {
   const [open, setOpen] = React.useState(false);
 
@@ -39,7 +37,6 @@ export default function Hero() {
      
     const isSmall = index === 0 || index === 2;
 
-    // ТІЛЬКИ Grid-властивості
     return {
      cols: 1,
      rows: isSmall ? 1 : 2,
@@ -47,7 +44,6 @@ export default function Hero() {
    };
   
   const standardRowHeight = isDesktop ? 200 : isTablet ? 300 : 220;
-  // Висота ImageList залишається 408px
   const desktopHeight = standardRowHeight * 2 + 8; 
   
   return (
@@ -105,34 +101,29 @@ export default function Hero() {
         key={item.img}
         cols={cols}
         rows={rows}
-        // !!! ПОВЕРТАЄМО СТАНДАРТНІ СТИЛІ
         sx={{
           width: "100%",
           height: '100%',
           maxWidth: isDesktop ? 'none' : 400, 
           mx: isDesktop ? 0 : "auto",
-          // Видаляємо всі конфліктуючі стилі
         }}
       >
-        {/* !!! ОСНОВНА ЗМІНА: Обгортаємо img в Box для центрування */}
         <Box 
           sx={{
             width: '100%',
             height: '100%',
             display: 'flex',
-            alignItems: 'center', // Вертикальне центрування
-            justifyContent: 'center', // Горизонтальне центрування
+            alignItems: 'center',
+            justifyContent: 'center', 
           }}
         >
           <img
             src={item.img}
             alt={item.title}
-            // Зображення має займати всю доступну ширину обгортки
             style={{
               width: "100%",
-              // Висота auto, щоб object-fit працював без спотворень
               height: "auto", 
-              maxHeight: '100%', // Обмежуємо максимальну висоту для центрування
+              maxHeight: '100%', 
               objectFit: "cover",
               borderRadius: "8px",
             }}
@@ -143,86 +134,46 @@ export default function Hero() {
   })}
   </ImageList>
 
-      </Box>
+</Box>
 
      {/* Текст і кнопка */}
 
-<Box
-
-sx={{
-
-display: "flex",
-
-flexDirection: "column",
-
-gap: 2,
-
-alignItems: "center",
-
-mt: 3,
-
-}}
-
+  <Box sx={{
+    display: "flex",
+    flexDirection: "column",
+    gap: 2,
+    alignItems: "center",
+    mt: 3,}}
 >
 
-<Typography
+  <Typography
+    component="h2"
+    variant={isMobile ? "h6" : "h5"}
+    align="center"
+  >
+    Follow our newsletter
+  </Typography>
+  <Button
+    onClick={handleOpen}
+        variant="contained"
+        sx={{
+          borderRadius: "20px",
+          backgroundColor: "orange",
+          color: "white",
+          px: 3,
+          py: 1,
+          "&:hover": {
+            backgroundColor: "#e69500",
+          },
 
-component="h2"
-
-variant={isMobile ? "h6" : "h5"}
-
-align="center"
-
->
-
-Follow our newsletter
-
-</Typography>
-
-<Button
-
-onClick={handleOpen}
-
-variant="contained"
-
-sx={{
-
-borderRadius: "20px",
-
-backgroundColor: "orange",
-
-color: "white",
-
-px: 3,
-
-py: 1,
-
-"&:hover": {
-
-backgroundColor: "#e69500",
-
-},
-
-}}
-
->
-
-Subscribe
-
-</Button>
-
-</Box>
-
-
-
+    }}>
+      Subscribe
+  </Button>
+  </Box>
 {/* Модальне вікно */}
-
-<Subs open={open} handleClose={handleClose} />
-
+  <Subs open={open} handleClose={handleClose} />
 </Box>
-
 );
-
 }
 
 const itemData = [

@@ -418,7 +418,6 @@ export default function ControlledAccordions() {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2bh-content"
                     id="panel2bh-header"
-                    onClick={fetchOrders}
         >
           <Typography component="span" sx={{ width: '33%', flexShrink: 0 }}>
             Orders

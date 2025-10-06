@@ -1,16 +1,14 @@
-// hooks/useAuth.js
 import { useState, useEffect, useRef } from 'react';
 
 const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const hasCheckedAuth = useRef(false); // Додаємо реф для перевірки
+  const hasCheckedAuth = useRef(false);
   const API_URL = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const checkAuth = async () => {
-      // Якщо вже перевіряли аутентифікацію, не робимо повторний запит
       if (hasCheckedAuth.current) return;
       
-      hasCheckedAuth.current = true; // Мітка, що запит зроблено
+      hasCheckedAuth.current = true; 
 
       try {
         const response = await fetch(`${API_URL}/api/auth/check`, {
@@ -24,7 +22,7 @@ const useAuth = () => {
           setIsAuthenticated(false);
         }
       } catch (error) {
-        setIsAuthenticated(false); // Встановлюємо аутентифікацію як false у разі помилки
+        setIsAuthenticated(false);
       }
     };
 
