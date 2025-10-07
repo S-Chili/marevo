@@ -61,7 +61,7 @@ function Header({ value, handleChange }) {
 
   const handleUserIconClick = () => {
     if (isAuthenticated) {
-      navigate("/userpage"); 
+      navigate("/mypage"); 
     } else {
       navigate("/signup");
     }
