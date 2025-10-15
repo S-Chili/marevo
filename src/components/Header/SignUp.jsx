@@ -16,100 +16,63 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
+import { useAuth } from "./AuthForm";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
-  const [firstName, setfirstName] = React.useState('');
-  const [lastName, setlastName] = React.useState('');
-  const [email, setemail] = React.useState('');
-  const [password, setpassword] = React.useState('');
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const [showAlert, setShowAlert] = React.useState(false);
-  const [userName, setUserName] = React.useState('');
+  const [alertName, setAlertName] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-  const [userId, setUserId] = React.useState('');
   
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault(); 
     setLoading(true);
-    const userData = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email: email.trim(),
-      password: password.trim(),
-    };
-    
+
+    const userData = { firstName, lastName, email, password };
+
     try {
-      // Відправляємо дані на сервер для реєстрації
       const response = await fetch(`${API_URL}/api/auth/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
+        credentials: "include",
       });
-
-      // Перевірка успіху реєстрації
-      if (!response.ok) {
-        throw new Error("Error during registration");
-      }
 
       const data = await response.json();
-      console.log("Response from server:", data);
 
-      // Після реєстрації автоматично виконуємо логін
-      const loginResponse = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email.trim(),
-          password: password.trim(),
-        }),
-        credentials: "include", // Додаємо кукі
-      });
-
-      if (!loginResponse.ok) {
-        throw new Error("Error during login");
+      if (!response.ok) {
+         const errorMessage = data.message || "Error during registration";
+         throw new Error(errorMessage);
       }
 
-      const loginData = await loginResponse.json();
-      localStorage.setItem("userId", data.user._id);
-       console.log(userId);
-      setUserName(data.firstName);
-      setUserId(data.user._id);
-   localStorage.setItem('showAlert', 'true');
-    setShowAlert(true);
+      login(data.user); 
+      
+      setAlertName(data.user.firstName);
 
-    // Встановлюємо таймер, щоб автоматично закрити алерт через 30 секунд
-        setTimeout(() => {
-          setShowAlert(false);
-          localStorage.removeItem('showAlert');
-          navigate('/'); // Перенаправлення після того, як алерт закриється
-        }, 2000); // 2 секунд
+      setShowAlert(true);
+      setTimeout(() => {
+        setShowAlert(false);
+        navigate("/");
+      }, 2000);
 
-      console.log("Login success:", loginData);
-
-      // Після успішного логіну, очистити поля форми
-      setfirstName('');
-      setlastName('');
-      setemail('');
-      setpassword('');
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPassword("");
+      
     } catch (error) {
       console.error("Failed:", error.message);
+      alert(`Registration failed: ${error.message}`); 
     } finally {
       setLoading(false);
     }
@@ -139,19 +102,21 @@ export default function SignUp() {
             {showAlert && (
               <Stack sx={{ width: '100%' }} spacing={2}>
                 <Alert severity="success">
-                  {`Welcome, ${userName}! You have successfully logged in.`}
+                  {`Welcome, ${alertName}! You have successfully logged in.`}
                 </Alert>
               </Stack>
             )}
           </Box>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               {loading ? (
-                <Stack spacing={1}>
+                // ... Skeleton loading ...
+                <Stack spacing={1} sx={{ width: 395 }}>
+                  <Skeleton variant="rectangular" width="100%" height={56} />
+                  <Skeleton variant="rectangular" width="100%" height={56} />
+                  <Skeleton variant="rectangular" width="100%" height={56} />
+                  <Skeleton variant="rectangular" width="100%" height={56} />
                   <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />                  <Skeleton variant="rectangular" width={210} height={40} />
-                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-                  <Skeleton variant="text" sx={{ fontSize: '1rem' }} />                 
                 </Stack>
               ) : (
               <div style={{ display: 'flex', justifySelf: 'center', flexDirection: 'column', gap: '10px' }}>
@@ -164,7 +129,7 @@ export default function SignUp() {
                     id="firstName"
                     value={firstName}
                     label="First Name"
-                    onChange={(e) => setfirstName(e.target.value)}
+                    onChange={(e) => setFirstName(e.target.value)} 
                     autoFocus
                   />
                 </Grid>
@@ -174,7 +139,7 @@ export default function SignUp() {
                     fullWidth
                     id="lastName"
                     value={lastName}
-                    onChange={(e) => setlastName(e.target.value)}
+                    onChange={(e) => setLastName(e.target.value)} 
                     label="Last Name"
                     name="lastName"
                     autoComplete="family-name"
@@ -186,7 +151,7 @@ export default function SignUp() {
                     fullWidth
                     id="email"
                     value={email}
-                    onChange={(e) => setemail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)} 
                     label="Email Address"
                     name="email"
                     autoComplete="email"
@@ -198,7 +163,7 @@ export default function SignUp() {
                     fullWidth
                     name="password"
                     value={password}
-                    onChange={(e) => setpassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)} 
                     label="Password"
                     type="password"
                     id="password"
@@ -216,10 +181,10 @@ export default function SignUp() {
             </Grid>
             <Button
               type="submit"
-              onClick={handleSignUp}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={loading} 
             >
               {loading ? 'Sending...' : 'Sign Up'}
             </Button>

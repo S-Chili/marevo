@@ -12,12 +12,14 @@ import {
   Link,
   Button,
 } from "@mui/material";
+import Avatar from '@mui/material/Avatar';
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import HeadsetMicOutlinedIcon from "@mui/icons-material/HeadsetMicOutlined";
+import LogoutIcon from '@mui/icons-material/Logout';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import useAuth from "./useAuth"; 
+import { useAuth } from './AuthForm';
 import FaceLogo from "../Footer/facebook.png";
 import InstaLogo from "../Footer/instagram.png";
 import logo from "../../logo192.png";
@@ -41,11 +43,16 @@ function Header({ value, handleChange }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const isAuthenticated = useAuth();
-
+  const { isAuthenticated, logout, isAuthReady, user } = useAuth();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [callModalOpen, setCallModalOpen] = useState(false);
+
+  const API_URL = process.env.REACT_APP_API_URL;
   
+  if (!isAuthReady) {
+    return null; 
+  } 
+
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
   };
@@ -67,8 +74,23 @@ function Header({ value, handleChange }) {
     }
   };
 
+   const handleLogout = async () => {
+    try {
+      await fetch(`${API_URL}/api/auth/logout`, {
+        method: "GET",
+        credentials: "include",
+      });
+      logout();
+      navigate("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   const handleOpenCallModal = () => setCallModalOpen(true);
   const handleCloseCallModal = () => setCallModalOpen(false);
+
+  const avatarUrl = user?.avatarUrl ? `${API_URL}${user.avatarUrl}` : null;
 
   return (
     <>
@@ -98,8 +120,18 @@ function Header({ value, handleChange }) {
 
           {/* Right icons */}
           <Box>
+            {/* ✅ Кнопка "Logout" відображається лише для авторизованих користувачів */}
+            {isAuthenticated && (
+              <IconButton onClick={handleLogout}>
+                <LogoutIcon />
+              </IconButton>
+            )}
             <IconButton onClick={handleUserIconClick}>
-              <PersonOutlineOutlinedIcon />
+              {isAuthenticated && avatarUrl ? (
+                <Avatar src={avatarUrl} alt="User Avatar" sx={{ width: 24, height: 24 }} />
+              ) : (
+                <PersonOutlineOutlinedIcon />
+              )}
             </IconButton>
             <IconButton>
               <HeadsetMicOutlinedIcon onClick={handleOpenCallModal}/>

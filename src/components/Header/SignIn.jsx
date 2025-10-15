@@ -16,91 +16,68 @@ import Alert from '@mui/material/Alert';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom'; 
-import Cookies from 'js-cookie';
+import { useAuth } from './AuthForm'; 
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
 
   const navigate = useNavigate();
-
-  const [email, setemail] = React.useState('');
-  const [password, setpassword] = React.useState('');
+  const { login } = useAuth();
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   const [showAlert, setShowAlert] = React.useState(false);
-  const [userName, setUserName] = React.useState('');
-  const [userLastName, setUserLastName] = React.useState('');
-  const [userId, setUserId] = React.useState('');
   const [loading, setLoading] = React.useState(false);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const [alertName, setAlertName] = React.useState('');
     
-  
   const API_URL = process.env.REACT_APP_API_URL;
 
-  const handleSignIn = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
 
     const userData = {
       email: email.trim(),
       password: password.trim(),
     };
-    
- try {
-    // Відправляємо дані на сервер
-    const response = await fetch(`${API_URL}/api/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-      credentials: "include", // Додаємо кукі в запит
-    });
 
-    // Перевіряємо, чи все пройшло успішно
-    if (!response.ok) {
-      throw new Error("Error submitting the form");
-    }
+    try {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+        credentials: 'include',
+      });
 
-   const data = await response.json();
-   console.log("Response from server:", data);
-   
-   Cookies.set("token", data.token, { expires: 7, secure: true });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || 'Error submitting the form');
+      }
 
-   localStorage.setItem("userFirstName", data.user.firstName);
-   localStorage.setItem("userLastName", data.user.lastName);
-   localStorage.setItem("userId", data.user._id);
-   console.log(userId);
-   
-   setUserName(data.user.firstName);
-   setUserLastName(data.user.lastName)
-   setUserId(data.user._id);
-   localStorage.setItem('showAlert', 'true');
-    setShowAlert(true);
+      const data = await response.json();
+      console.log('Response from server:', data);
 
-    // Встановлюємо таймер, щоб автоматично закрити алерт через 30 секунд
-    setTimeout(() => {
-      setShowAlert(false);
-      localStorage.removeItem('showAlert');
-      navigate('/'); // Перенаправлення після того, як алерт закриється
-    }, 2000); // 2 секунд
+      setAlertName(data.user.firstName);
+      
+      login(data.user); 
+      
+      setShowAlert(true);
+      
+      setTimeout(() => {
+        setShowAlert(false);
+        navigate('/');
+      }, 2000);
 
-      // Перенаправляємо користувача після входу
-    
+      setEmail('');
+      setPassword('');
 
-   // Відкриваємо діалог після успішної відправки
-    setemail('');
-    setpassword('');
-  } catch (error) {
-    console.error("Failed to submit the form:", error.message);
-  } finally {
+    } catch (error) {
+      console.error('Failed to submit the form:', error.message);
+      alert(error.message);
+    } finally {
       setLoading(false);
     }
-};
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -124,7 +101,7 @@ export default function SignIn() {
             {showAlert && (
               <Stack sx={{ width: '100%' }} spacing={2}>
                 <Alert severity="success">
-                  {`Welcome, ${userName}${userLastName}! You have successfully logged in.`}
+                  {`Welcome, ${alertName}! You have successfully logged in.`}
                 </Alert>
               </Stack>
             )}
@@ -132,7 +109,8 @@ export default function SignIn() {
           {loading ? (
             <Stack spacing={1}>
               <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-              <Skeleton variant="text" sx={{ fontSize: '1rem' }} />                  <Skeleton variant="rectangular" width={210} height={40} />
+              <Skeleton variant="text" sx={{ fontSize: '1rem' }} />                  
+              <Skeleton variant="rectangular" width={210} height={40} />
             </Stack>
           ) : (
             <div style={{ display: 'flex', justifySelf: 'center', flexDirection: 'column', gap: '10px' }}>
@@ -145,7 +123,7 @@ export default function SignIn() {
                   label="Email Address"
                   name="email"
                   value={email}
-                  onChange={(e) => setemail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   autoFocus
                 />
@@ -155,7 +133,7 @@ export default function SignIn() {
                   fullWidth
                   name="password"
                   value={password}
-                  onChange={(e) => setpassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   label="Password"
                   type="password"
                   id="password"
@@ -168,7 +146,6 @@ export default function SignIn() {
                 <Button
                   type="submit"
                   fullWidth
-                  onClick={handleSignIn}
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
@@ -187,7 +164,8 @@ export default function SignIn() {
                   </Grid>
                 </Grid>
               </Box>
-            </div>)}
+            </div>
+          )}
         </Box>
       </Container>
     </ThemeProvider>

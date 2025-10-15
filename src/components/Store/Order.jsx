@@ -2,12 +2,14 @@ import React from "react";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Button } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import { useAuth } from "../Header/AuthForm";
 
 export default function Order({ open, selectedItem, handleClose }) {
   const [openNew, setOpenNew] = React.useState(false);
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
   const [loading, setLoading] = React.useState(false);
+  const { user } = useAuth();
   
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -21,13 +23,18 @@ export default function Order({ open, selectedItem, handleClose }) {
     setOpenNew(false);
     handleClose();
   };
-  
-  const userId = localStorage.getItem("userId");
+
+  const userId = user?._id;
 
   const handleOrderSubmit = async () => {
+        if (!userId) {
+            alert("Будь ласка, увійдіть, щоб оформити замовлення.");
+            return;
+        }
+
         setLoading(true);
         const formData = {
-            userID: userId,
+            userID: userId, 
             name: name,
             phone: phone,
             bouquetTite: selectedItem.title,

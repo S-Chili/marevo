@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
-import useAuth from "../Header/useAuth";
+import {useAuth} from "../Header/AuthForm";
 import Order from './Order';
 import flower1 from './flowersImage1.jpg';
 import flower2 from './flowersImage2.jpg';
@@ -27,10 +27,10 @@ const Store = React.forwardRef(({ tabLabel }, ref) => {
   const [open, setOpen] = React.useState(false);
   const [selectedItem, setSelectedItem] = React.useState(null);
   const [favs, setFavs] = React.useState([]); // Масив замість Set
-  const userId = localStorage.getItem("userId");
   
   const API_URL = process.env.REACT_APP_API_URL;
-  const isAuthenticated = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const userId = user?._id;
   const navigate = useNavigate();
 
   const handleOpen = (item) => {
@@ -45,7 +45,10 @@ const Store = React.forwardRef(({ tabLabel }, ref) => {
 
   React.useEffect(() => {
   const fetchFavorites = async () => {
-    if (!userId) return;
+    if (!userId) {
+          setFavs([]);
+          return;
+      }
 
     try {
       const response = await fetch(`${API_URL}/api/favorites/${userId}`, {
@@ -117,7 +120,7 @@ const deleteFav = async (favId) => {
     });
 
     if (response.ok) {
-      setFavs(prevFavs => prevFavs.filter(fav => fav._id !== favId)); // Видаляємо елемент з масиву
+      setFavs(prevFavs => prevFavs.filter(fav => fav._id !== favId)); 
       console.log("Favorite deleted successfully");
     } else {
       console.error("Error deleting favorite item");
@@ -129,7 +132,7 @@ const deleteFav = async (favId) => {
   
   const handleProtectedClickFav = (item) => {
         if (!isAuthenticated) {
-            navigate('/signup'); // Перенаправлення незалогінених користувачів
+            navigate('/signup'); 
         } else {
           
           toggleFavorite(item);
@@ -138,9 +141,9 @@ const deleteFav = async (favId) => {
   
   const handleProtectedClickOrder = (item) => {
         if (!isAuthenticated) {
-            navigate('/signup'); // Перенаправлення незалогінених користувачів
+            navigate('/signup'); 
         } else {
-            handleOpen(item);;
+            handleOpen(item);
         }
     };
   

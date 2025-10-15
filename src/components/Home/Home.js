@@ -6,10 +6,10 @@ import About from "../About/About";
 import Store from "../Store/Store";
 import Delivery from "../Delivery/Delivery";
 import Footer from "../Footer/Footer";
-import useAuth from "../Header/useAuth";
+import { useAuth } from "../Header/AuthForm";
 
 const Home = ({ value, handleChange }) => {
-  const isAuthenticated = useAuth();
+  const { isAuthenticated } = useAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
